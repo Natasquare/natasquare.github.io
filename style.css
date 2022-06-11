@@ -68,7 +68,7 @@ body {
     background-color: transparent;
     border: none;
     color: var(--white);
-    font-size: 1.1em;
+    font-size: 1em;
     font-family: "Source Code Pro", monospace;
     outline: none;
     caret-color: var(--white);
