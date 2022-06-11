@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>ntsq@portfolio: ~</title>
+        <link rel="icon" href="assets/icon.png" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    </head>
+    <body>
+        <div class="header">
+            <h1>
+                ntsq@portfolio: <span class="path">~</span>
+                <span class="icons">
+                    <i class="fa-regular fa-window-minimize"></i>
+                    <i class="fa-regular fa-square"></i>
+                    <i class="fa-regular fa-x"></i>
+                </span>
+            </h1>
+        </div>
+        <div class="terminal">
+            <div class="display">
+                <span style="color: var(--main); font-weight: 700">404 <span style="color: var(--white)">|</span> Page not found</span><br />
+                <span id="msg">You will be redirected to the main page in <span id="tmr">10</span></span>
+            </div>
+        </div>
+        <script type="text/javascript">
+            setInterval(() => {
+                let t = document.querySelector('#tmr'),
+                    i = t.innerHTML;
+                if (i > 0) t.innerHTML = i - 1;
+                else {
+                    document.querySelector('#msg').innerHTML = 'Redirecting...';
+                    clearInterval();
+                    window.location.href = '/';
+                }
+            }, 1000);
+        </script>
+    </body>
+</html>
