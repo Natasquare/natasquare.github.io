@@ -49,26 +49,37 @@ input = document.querySelector('input');
 input.oninput = (e) => {
     let k = e.data?.[e.data.length - 1];
     if (k && sgame) sdir = k === 'w' ? 'up' : k === 's' ? 'down' : k === 'a' ? 'left' : k === 'd' ? 'right' : sdir;
-    input.style.width = `${input.value.length || 1}ch`
+    input.style.width = `${input.value.length}ch`;
 };
 document.onclick = (e) => {
     if (e.composedPath().includes(document.querySelector('.header'))) return;
     input.focus();
 };
 
+cache = [0, 0];
+setInterval(() => {
+    const cursor = document.querySelector('.cursor'),
+        cur = [input.selectionStart, input.selectionEnd];
+    if (cache.some((x, i) => x !== cur[i])) {
+        cache = cur;
+        cursor.style.animation = 'none';
+        cursor.offsetHeight;
+        cursor.style.animation = null;
+        cursor.innerHTML = '&nbsp;'.repeat(cur[1] - cur[0] || 1);
+        cursor.style.left = `calc(${cur[0] + 4}ch + 15px)`;
+    }
+}, 7);
+
 path = '/';
 f = (p) => p?.replace(/^\//, '~');
 terminal = {};
 scrollIndex = -1;
 
-terminal.log = (text) =>
-    text &&
-    $('.display').append(
-        text
-            .replace(/ {2,}/g, (x) => '&nbsp;'.repeat(x.length))
-            .replace(/\n/g, '<br>')
-            .replace(/\/bl\/(.*?)\/b\//g, '<span style="color: var(--main)">$1</span>')
-    );
+terminal.log = (text, safe = true) => {
+    if (!text) return;
+    text = safe ? document.createTextNode(text) : text.replace(/\/bl\/(.*?)\/b\//g, '<span style="color: var(--main)">$1</span>');
+    $('.display').append(text);
+};
 terminal.clear = () => $('.display').text('');
 
 lg = (value) => {
@@ -95,17 +106,17 @@ I'm currently learning... I'm not even sure right now, but I like to make things
 Besides programming, I'm also an artist and a huge music fan.`,
     'contact.txt': `You can contact me on Discord: <a href="https://discord.com/users/696698254770831421">Natasquare#8297</a>, or on Twitter: <a href="https://twitter.com/natasquare_">@natasquare_</a>.
 You can also find me on GitHub: <a href="//github.com/Natasquare">Natasquare</a> and contact me by email: <a href="mailto:nat.devvv@gmail.com">nat.devvv@gmail.com</a>.`,
-    'skills.txt': `┌────────────┬─────────────┐
-│  /bl/Language/b/  │ /bl/Skill level/b/ │
-├────────────┼─────────────┤
-│ Node.js    │ Strong      │
-│ Javascript │ Proficient  │
-│ HTML5      │ Proficient  │
-│ CSS3       │ Proficient  │
-│ Typescript │ Competent   │
-│ Dart       │ Competent   │
-│ Svelte     │ Beginner    │
-└────────────┴─────────────┘`
+    'skills.txt': `+------------+-------------+
+|  /bl/Language/b/  | /bl/Skill level/b/ |
++------------+-------------+
+| Node.js    | Strong      |
+| Javascript | Proficient  |
+| HTML5      | Proficient  |
+| CSS3       | Proficient  |
+| Typescript | Competent   |
+| Dart       | Competent   |
+| Svelte     | Beginner    |
++------------+-------------+`
 };
 
 isValidPath = (path) => {
@@ -140,7 +151,7 @@ commands = [
                 file = split[split.length - 1];
             if (!pth || !file || !fs[dir.startsWith('/') ? dir : '/' + dir]?.includes(file)) return terminal.log('cat: no such file or directory: ' + args[0]);
             if (!types.files.includes(file)) return terminal.log('cat: read error: is a directory');
-            if (file.endsWith('.txt')) return terminal.log(content[file]);
+            if (file.endsWith('.txt')) return terminal.log(content[file], false);
             file = file === 'me.jpg' ? 'h.gif' : file;
             const img = imgs.find((x) => x.src.includes(file));
             open('', '_blank', `toolbar=no,scrollbars=no,resizable=no,width=${img.width / 3 - 4.6},height=${img.height / 3 - 10.3},left=${visualViewport.width / 2 + img.width / 6},top=${visualViewport.height / 2 - img.height / 6}`).document.write(`<head><title>ntsq@portfolio: ${f(pth)}</title><link rel="icon" href="//${location.host}/assets/icon.png" /></head><body style="overflow:hidden;background-color:#101215;margin:0"><img src="//${location.host}/assets/${file}" width="${img.width / 3}" height="${img.height / 3}" /></body>`);
@@ -223,14 +234,16 @@ commands = [
                         return a < b ? -1 : 1;
                     })
                     .map((x) => (types.files.includes(x) ? x : `/bl/${x}/b/`))
-                    .join('<br>')
+                    .join('<br>'),
+                false
             );
         }
     },
     {
         name: 'neofetch',
         execute: () =>
-            terminal.log(`/bl/              %%%%%%%%%/b/
+            terminal.log(
+                `/bl/              %%%%%%%%%/b/
 /bl/              %%%%%%%%%/b/
 /bl/#             %%%%%%%%%/b/   <span style="text-decoration:underline">/bl/ntsq/b/@/bl/portfolio/b/</span>
 /bl/%%#           %%%%%%%%%   Host:/b/ ${location.host}
@@ -242,7 +255,9 @@ commands = [
 /bl/%%%%%%%%%         %%%%%   License:/b/ MIT
 /bl/%%%%%%%%%           ,%%   Author:/b/ Natasquare
 /bl/%%%%%%%%%/b/ 
-/bl/%%%%%%%%%/b/`)
+/bl/%%%%%%%%%/b/`,
+                false
+            )
     },
     {
         name: 'pwd',
@@ -257,7 +272,7 @@ commands = [
                 head: '<span class="snake-head">&#9608;&#9608;</span>',
                 body: '<span class="snake-body">&#9608;&#9608;</span>',
                 food: '<span class="snake-food">&#9608;&#9608;</span>',
-                empty: '<span class="snake-empty">&#9608;&#9608;</span>',
+                empty: '<span class="snake-empty">&#9608;&#9608;</span>'
             });
             sin = setInterval(() => {
                 terminal.clear();
@@ -326,8 +341,9 @@ document.onkeydown = (e) => {
     }
 };
 
-terminal.log(`        _               
-&nbsp;_ __  | |_  ___   __&nbsp;_ 
+terminal.log(
+    `        _               
+ _ __  | |_  ___   __ _ 
 | '_ \\ | __|/ __| / _\` |
 /bl/| | | || |_ \\__ \\| (_| |/b/
 |_| |_| \\__||___/ \\__, |
@@ -335,4 +351,6 @@ terminal.log(`        _
 
 Hii! I'm /bl/Natasquare/b/, and this is my portfolio.
 You can type /bl/"help"/b/ to see all commands.
-Copyright © 2022 Natasquare.`);
+Copyright © 2022 Natasquare.`,
+    false
+);

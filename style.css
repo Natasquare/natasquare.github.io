@@ -9,12 +9,17 @@
 body {
     background: var(--black);
     color: var(--white);
-    font-family: "Source Code Pro", monospace;
+    font-family: 'Source Code Pro', monospace;
     margin: 0;
 }
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+::selection {
+    color: var(--black);
+    background: var(--white);
 }
 
 .header {
@@ -69,10 +74,29 @@ body {
     border: none;
     color: var(--white);
     font-size: 1em;
-    font-family: "Source Code Pro", monospace;
+    font-family: 'Source Code Pro', monospace;
     outline: none;
     caret-color: var(--white);
     padding: 0;
+    width: 0;
+    caret-color: transparent;
+}
+
+.input-wrapper {
+    display: inline;
+    width: 100%;
+}
+
+.cursor {
+    font-family: "Source Code Pro", monospace;
+    animation: blink 1.5s step-end infinite;
+    background: var(--white);
+    mix-blend-mode: difference;
+    position: fixed;
+}
+
+.display {
+    white-space: pre;
 }
 
 .display a {
@@ -91,7 +115,7 @@ body {
 
 .snake-body {
     color: var(--main);
-    opacity: .8;
+    opacity: 0.8;
 }
 
 .snake-food {
@@ -110,6 +134,16 @@ body {
         display: none;
     }
     .terminal {
-        font-size: .85em;
+        font-size: 0.85em;
+    }
+}
+
+@keyframes blink {
+    from,
+    to {
+        background: var(--white);
+    }
+    50% {
+        background: transparent;
     }
 }
