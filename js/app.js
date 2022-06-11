@@ -260,7 +260,6 @@ commands = [
                 empty: '<span class="snake-empty">&#9608;&#9608;</span>',
             });
             sin = setInterval(() => {
-                input.focus();
                 terminal.clear();
                 if ((!sgame.move(sdir) && sdir) || send) {
                     terminal.log('snake: game over, score: ' + sgame.score);
