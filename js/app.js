@@ -46,7 +46,10 @@ timeCon = (n) => {
 };
 
 input = document.querySelector('input');
-input.oninput = () => (input.style.width = `${input.value.length || 1}ch`);
+input.oninput = (e) => {
+    if (sgame) sdir = e.data === 'w' ? 'up' : e.data === 's' ? 'down' : e.data === 'a' ? 'left' : e.data === 'd' ? 'right' : sdir;
+    input.style.width = `${input.value.length || 1}ch`
+};
 document.onclick = (e) => {
     if (e.composedPath().includes(document.querySelector('.header'))) return;
     input.focus();
@@ -287,7 +290,6 @@ commands = [
 
 document.onkeydown = (e) => {
     const apb = 'abcdefghijklmnopqrstuvwxyz'.split('');
-    if (sgame) sdir = e.key === 'w' ? 'up' : e.key === 's' ? 'down' : e.key === 'a' ? 'left' : e.key === 'd' ? 'right' : sdir;
     if (!['Enter', 'ArrowUp', 'ArrowDown'].includes(e.key) && !(e.ctrlKey && apb.includes(e.key))) return;
     if (e.key === 'Enter') {
         let err;
