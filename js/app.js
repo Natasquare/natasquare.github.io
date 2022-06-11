@@ -66,7 +66,7 @@ setInterval(() => {
         cursor.offsetHeight;
         cursor.style.animation = null;
         cursor.innerHTML = '&nbsp;'.repeat(cur[1] - cur[0] || 1);
-        cursor.style.left = `calc(${cur[0] + 4}ch + 15px)`;
+        cursor.style.left = `calc(${cur[0] + 3 + path.length}ch + 15px)`;
     }
 }, 7);
 
