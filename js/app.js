@@ -326,10 +326,12 @@ document.onkeydown = (e) => {
     }
 };
 
-terminal.log(`&nbsp;_  _ _____ ___  ___  
-| \\| |_   _/ __|/ _ \\
-/bl/| .\` | | | \\__ \\ (_) |/b/
-|_|\\_| |_| |___/\\__\\_\\
+terminal.log(`        _               
+&nbsp;_ __  | |_  ___   __&nbsp;_ 
+| '_ \\ | __|/ __| / _\` |
+/bl/| | | || |_ \\__ \\| (_| |/b/
+|_| |_| \\__||___/ \\__, |
+                     |_|
 
 Hii! I'm /bl/Natasquare/b/, and this is my portfolio.
 You can type /bl/"help"/b/ to see all commands.
