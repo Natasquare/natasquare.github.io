@@ -47,7 +47,8 @@ timeCon = (n) => {
 
 input = document.querySelector('input');
 input.oninput = (e) => {
-    if (sgame) sdir = e.data === 'w' ? 'up' : e.data === 's' ? 'down' : e.data === 'a' ? 'left' : e.data === 'd' ? 'right' : sdir;
+    let k = e.data?.[e.data.length - 1];
+    if (k && sgame) sdir = k === 'w' ? 'up' : k === 's' ? 'down' : k === 'a' ? 'left' : k === 'd' ? 'right' : sdir;
     input.style.width = `${input.value.length || 1}ch`
 };
 document.onclick = (e) => {
