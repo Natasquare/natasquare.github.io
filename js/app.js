@@ -277,14 +277,14 @@ commands = [
             sin = setInterval(() => {
                 terminal.clear();
                 if ((!sgame.move(sdir) && sdir) || send) {
-                    terminal.log('snake: game over, score: ' + sgame.score);
+                    terminal.log(`snake: game over, score: /bl/${sgame.score}/b/`, false);
                     clearInterval(sin);
                     $('.command-line').css('opacity', '1');
                     input.value = '';
                     input.style.width = '1ch';
                     return (sgame = 0);
                 }
-                terminal.log(`score: ${sgame.score}\n${sgame.getBoard()}`);
+                terminal.log(`score: /bl/${sgame.score}/b/\n${sgame.getBoard()}`, false);
             }, 200);
         }
     },
