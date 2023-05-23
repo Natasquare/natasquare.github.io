@@ -7,7 +7,7 @@ $ = {
 
 let wcounter = 0;
 
-terminal = new Terminal();
+terminal = new Terminal({commands});
 
 let eawh = createDragElement('ntsq@portfolio: ~', terminal.term);
 document.body.append(eawh.e);
