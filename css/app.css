@@ -86,7 +86,7 @@ body {
 
 .window {
     position: absolute;
-    box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), 0 0 10px black;
+    box-shadow: 0 0 10px black;
     font-size: 16px;
     border-radius: calc(var(--radius) + 2px); /* idk why but weird gap without +2px */
     display: flex;
@@ -95,7 +95,7 @@ body {
     min-height: calc(42px + 1em); /* i fucking love hardcoding */
     background-color: var(--dark);
     border: 3px var(--dark2) solid;
-    transition: opacity var(--transition);
+    transition: opacity var(--transition), box-shadow var(--transition);
 }
 .window .content {
     /* border-radius: var(--radius); */
@@ -153,6 +153,11 @@ body {
 .window-active .header {
     color: var(--dark2);
 }
+.window-active,
+.window:has(.close:hover) { /* doesn't work for firefox */
+    box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), 0 0 10px black;
+}
+
 iframe {
     border: none;
     width: 100%;
@@ -161,6 +166,8 @@ iframe {
 
 .terminal {
     white-space: pre;
+    min-height: 10em;
+    min-width: calc(25ch + 20px);
 }
 .terminal .prompt-input {
     background-color: transparent;
