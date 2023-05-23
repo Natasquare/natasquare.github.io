@@ -25,12 +25,17 @@
 
 * {
     scroll-behavior: smooth;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: thin;
+    scrollbar-color: var(--hl2) transparent;
 }
 ::-webkit-scrollbar {
-    background: transparent; /* Chrome/Safari/Webkit */
-    width: 0px;
+    background: transparent;
+    width: 3px;
+    height: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--hl2);
+    border-radius: var(--radius);
 }
 
 /* nerd */
@@ -166,8 +171,6 @@ iframe {
 
 .terminal {
     white-space: pre;
-    min-height: 10em;
-    min-width: calc(25ch + 20px);
 }
 .terminal .prompt-input {
     background-color: transparent;
@@ -202,6 +205,9 @@ iframe {
 .prompt-result .prompt {
     margin: 0;
     margin-bottom: 1em;
+}
+.prompt-result .prompt-input {
+    font-weight: 500;
 }
 .error {
     border-left: 1px var(--red) solid;
