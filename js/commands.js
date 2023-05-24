@@ -1,6 +1,7 @@
 commands = {};
 
 commands.echo = (term, args) => (term.log(args[0] || ''), true);
+commands.clear = (term) => term.clear();
 
 commands.cd = (term, args) => {
     let read = term.d.fs.read(args[0], term.d.dir);

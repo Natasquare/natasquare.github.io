@@ -1,5 +1,5 @@
 $ = {
-    createEl: (...a) => document.createElement(...a),
+    create: (...a) => document.createElement(...a),
     q: (...a) => document.querySelector(...a),
     qa: (...a) => document.querySelectorAll(...a),
     addClass: (e, a) => e.classList.add(...a.split(' '))
@@ -13,12 +13,10 @@ let eawh = createDragElement('ntsq@portfolio: ~', terminal.term);
 document.body.append(eawh.e);
 
 $.q('#runt').onclick = () => {
-    fr = $.createEl('iframe');
-    $.addClass(fr, 'content');
-    fr.src = '/old';
-    e = createDragElement('ntsq@portfolio: ~', fr);
-    $.addClass(e.close, 'a');
-    document.body.append(e.e);
+    terminal = new Terminal({commands});
+
+    let termel = createDragElement('ntsq@portfolio: ~', terminal.term);
+    document.body.append(termel.e);
 };
 
 $.qa('.button').forEach((x) =>
@@ -28,43 +26,60 @@ $.qa('.button').forEach((x) =>
     })
 );
 
-function createDragElement(name, content) {
+function createDragElement(name = 'unnamed', content) {
     let dpos = [0, 0, 0, 0],
         rpos = [0, 0, 0, 0];
 
-    content ??= $.createEl('div');
+    content ??= $.create('div');
 
-    const el = $.createEl('div'),
-        header = $.createEl('div'),
-        resize = $.createEl('div'),
-        close = $.createEl('span');
+    const el = $.create('div'),
+        header = $.create('div'),
+        close = $.create('span'),
+        max = $.create('span'),
+        resize = $.create('div');
 
-    $.addClass(el, 'window');
+    el.setAttribute('style', `--starting-width: calc(${name.length}ch + 74px + 2em)`); // gotta love hardcoding
+
+    $.addClass(el, 'window window-movable');
+
     $.addClass(header, 'header');
-    $.addClass(content, 'content');
+    $.addClass(close, 'fas fa-window-close close');
+    $.addClass(max, 'far fa-window-maximize max');
+
     $.addClass(resize, 'resize');
-    $.addClass(close, 'fas fa-times-circle close');
+
+    $.addClass(content, 'content');
 
     el.onmousedown = () => focus(el);
     focus(el);
 
-    function focus(w) {
+    function focus(w, full) {
         $.qa('.window').forEach((x) => x.classList.remove('window-active'));
         $.addClass(w, 'window-active');
+        if (full) {
+            w.classList.add('window-transitioning');
+            let rm = w.classList.contains('window-full');
+            if (rm) w.classList.remove('window-full');
+            else $.addClass(w, 'window-full');
+            setTimeout(() => w.classList.remove('window-transitioning'), 200)
+        }
         w.style.zIndex = ++wcounter;
     }
 
     el.style.top = el.style.left = Math.floor((Math.random() * Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight)) / 10) + 10 + 'px';
 
     header.innerHTML = name;
-    header.appendChild(close);
+    header.append(max, close);
 
     close.onclick = () => {
         el.style.opacity = 0;
         setTimeout(() => document.body.removeChild(el), 200);
     };
+    max.onclick = () => {
+        focus(el, true)
+    }
 
-    el.append(header, content, resize);
+    el.append(header, resize, content);
 
     header.onmousedown = (e) => {
         e = e || window.event;

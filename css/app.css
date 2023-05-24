@@ -13,6 +13,8 @@
     --yellow: #ebcb8b;
     --yellow-hl: #ebcb8b07;
     --yellow-hl2: #ebcb8b10;
+    --green: #8ebc67;
+    --orange: #d08770;
     --main-font-f: 'JetBrains Mono', 'JetBrains Mono NF';
     --main-font-s: 22px;
     --radius: 4px;
@@ -90,6 +92,8 @@ body {
 }
 
 .window {
+    width: var(--starting-width);
+    height: calc(50px + 3em);
     position: absolute;
     box-shadow: 0 0 10px black;
     font-size: 16px;
@@ -97,10 +101,13 @@ body {
     display: flex;
     flex-direction: column;
     min-width: fit-content;
-    min-height: calc(42px + 1em); /* i fucking love hardcoding */
+    min-height: calc(30px + 2em); /* i fucking love hardcoding */
     background-color: var(--dark);
     border: 3px var(--dark2) solid;
     transition: opacity var(--transition), box-shadow var(--transition);
+}
+.window-transitioning {
+    transition: opacity var(--transition), box-shadow var(--transition), width var(--transition), height var(--transition), top var(--transition), left var(--transition);
 }
 .window .content {
     /* border-radius: var(--radius); */
@@ -113,7 +120,7 @@ body {
     user-select: none;
     cursor: move;
     padding: 5px 10px;
-    padding-right: calc(32px + 1em);
+    padding-right: calc(64px + 2em);
     border-radius: var(--radius) var(--radius) 0 0;
     border-bottom: 3px var(--dark2) solid;
     box-shadow: 0 1px 3px var(--dark);
@@ -150,17 +157,53 @@ body {
     border-bottom-right-radius: 0;
     background-color: var(--red);
     cursor: pointer;
-    transform: translate(-3px, -4px);
+    transform: translate(-4px, -5px);
     box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), -1px -1px 1px #00000030, -2px -2px 4px #00000030, -3px -3px 4px #00000030,
         -4px -4px 4px #00000030;
     z-index: -2;
+}
+.window .header .max {
+    display: block;
+    position: absolute;
+    right: calc(1em + 25px);
+    height: calc(1em + 5px);
+    padding: 5px 10px;
+    border-radius: 0 var(--radius) 0 0;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+    border: 3px transparent solid;
+}
+.window .header .max:hover {
+    transition: border none;
+    color: var(--dark2) !important;
+    border: 3px var(--dark2) solid;
+    border-radius: var(--radius);
+    border-bottom-right-radius: 0;
+    background-color: var(--green);
+    cursor: pointer;
+    transform: translate(-4px, -5px);
+    box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), -1px -1px 1px #00000030, -2px -2px 4px #00000030, -3px -3px 4px #00000030,
+        -4px -4px 4px #00000030;
+    z-index: -2;
+}
+.window-full .header .max:hover {
+    background-color: var(--yellow);
 }
 .window-active .header {
     color: var(--dark2);
 }
 .window-active,
-.window:has(.close:hover) { /* doesn't work for firefox */
+.window:has(.close:hover) {
+    /* doesn't work for firefox :( */
     box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), 0 0 10px black;
+}
+.window-full {
+    width: calc(100vw - 26px) !important;
+    height: calc(100vh - 26px) !important;
+    top: 10px !important;
+    left: 10px !important;
+    box-shadow: none;
 }
 
 iframe {

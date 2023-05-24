@@ -30,7 +30,13 @@ class Terminal {
             l = this.term.children[this.term.childElementCount - 1];
         (l && l.classList.contains('prompt-result') && !a[0]?.classList?.contains('prompt') ? l : this.term).appendChild(node);
     }
-    clear() {}
+    clear() {
+        let parent = this.term.parentNode;
+        parent.removeChild(this.term);
+        this.term = document.createElement('div');
+        this.init();
+        parent.appendChild(this.term);
+    }
     createPrompt() {
         let prompt = document.createElement('form');
         prompt.classList.add('prompt');
