@@ -240,26 +240,6 @@ commands = [
         }
     },
     {
-        name: 'neofetch',
-        execute: () =>
-            terminal.log(
-                `/bl/              %%%%%%%%%/b/
-/bl/              %%%%%%%%%/b/
-/bl/#             %%%%%%%%%/b/   <span style="text-decoration:underline">/bl/ntsq/b/@/bl/portfolio/b/</span>
-/bl/%%#           %%%%%%%%%   Host:/b/ ${location.host}
-/bl/%%%%%         %%%%%%%%%   OS:/b/ ${navigator.userAgentData.platform}
-/bl/%%%%%%%       %%%%%%%%%   Resolution:/b/ ${screen.width}x${screen.height}
-/bl/%%%%%%%%%     %%%%%%%%%   Shell:/b/ ntsq-wb
-/bl/%%%%%%%%%     %%%%%%%%%   Theme:/b/ ntsq
-/bl/%%%%%%%%%       %%%%%%%   Uptime:/b/ ${timeCon(Date.now() - strt)}
-/bl/%%%%%%%%%         %%%%%   License:/b/ MIT
-/bl/%%%%%%%%%           ,%%   Author:/b/ Natasquare
-/bl/%%%%%%%%%/b/ 
-/bl/%%%%%%%%%/b/`,
-                false
-            )
-    },
-    {
         name: 'pwd',
         execute: () => terminal.log(path.slice(1) || path)
     },
@@ -351,6 +331,7 @@ terminal.log(
 
 Hii! I'm /bl/Natasquare/b/, and this is my portfolio.
 You can type /bl/"help"/b/ to see all commands.
+/b/A new update to this site is coming soon!/b/
 Copyright © 2022 Natasquare.`,
     false
 );
