@@ -331,7 +331,7 @@ terminal.log(
 
 Hii! I'm /bl/Natasquare/b/, and this is my portfolio.
 You can type /bl/"help"/b/ to see all commands.
-/b/A new update to this site is coming soon!/b/
-Copyright © 2022 Natasquare.`,
+/bl/A new update to this site is coming soon!/b/
+Copyright © 2023 Natasquare.`,
     false
 );
