@@ -39,13 +39,26 @@ class Terminal {
     }
     createPrompt() {
         let prompt = document.createElement('form');
-        prompt.classList.add('prompt');
+        prompt.classList.add('prompt', 'prompt-caret');
         prompt.setAttribute('dir', this.d.dir);
         let input = document.createElement('input');
         input.classList.add('prompt-input');
         prompt.appendChild(input);
 
         prompt.onsubmit = this.handleInput.bind(this);
+        input.onselectionchange = () => {
+            let pos = [input.selectionStart, input.selectionEnd],
+                len = pos[1] - pos[0],
+                addBack;
+            prompt.classList.remove('prompt-caret');
+            if (pos[0] === input.value.length || len === 0) {
+                // no other choices
+                clearTimeout(addBack);
+                addBack = setTimeout(() => prompt.classList.add('prompt-caret'), 1);
+            }
+            prompt.style.setProperty('--selection-pos', `calc(${pos[0] + 1 + 'ch'} + .5px)`); // what the hell is wrong with this font
+            prompt.style.setProperty('--selection-length', (len ? len : 1) + 'ch');
+        };
 
         return {prompt, input};
     }

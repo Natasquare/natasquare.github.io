@@ -38,7 +38,7 @@ function createDragElement(name = 'unnamed', content) {
         max = $.create('span'),
         resize = $.create('div');
 
-    el.setAttribute('style', `--starting-width: calc(${name.length}ch + 74px + 2em)`); // gotta love hardcoding
+    el.style.setProperty('--starting-width', `calc(${name.length}ch + 74px + 2em)`); // gotta love hardcoding
 
     $.addClass(el, 'window window-movable');
 
@@ -61,7 +61,7 @@ function createDragElement(name = 'unnamed', content) {
             let rm = w.classList.contains('window-full');
             if (rm) w.classList.remove('window-full');
             else $.addClass(w, 'window-full');
-            setTimeout(() => w.classList.remove('window-transitioning'), 200)
+            setTimeout(() => w.classList.remove('window-transitioning'), 200);
         }
         w.style.zIndex = ++wcounter;
     }
@@ -76,8 +76,8 @@ function createDragElement(name = 'unnamed', content) {
         setTimeout(() => document.body.removeChild(el), 200);
     };
     max.onclick = () => {
-        focus(el, true)
-    }
+        focus(el, true);
+    };
 
     el.append(header, resize, content);
 

@@ -15,7 +15,7 @@
     --yellow-hl2: #ebcb8b10;
     --green: #8ebc67;
     --orange: #d08770;
-    --main-font-f: 'JetBrains Mono', 'JetBrains Mono NF';
+    --main-font-f: 'JetBrains Mono', 'JetBrains Mono NF', monospace;
     --main-font-s: 22px;
     --radius: 4px;
     --transition: 200ms;
@@ -226,11 +226,36 @@ iframe {
     padding: 0;
 }
 .prompt {
+    --selection-pos: 1ch;
+    --selection-length: 1ch;
     margin: 10px;
     cursor: text;
 }
 .prompt .prompt-input {
     cursor: text;
+    caret-color: transparent;
+}
+.prompt::after {
+    content: ' ';
+}
+.prompt-input:not(:disabled)::selection {
+    background-color: transparent !important;
+}
+.prompt:focus-within::after {
+    background-color: var(--bright) !important;
+    mix-blend-mode: difference;
+    width: var(--selection-length);
+    position: absolute;
+    left: var(--selection-pos);
+    pointer-events: none;
+}
+.prompt-caret::after {
+    animation: blink 1696ms step-end infinite; /* nice */
+}
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
 }
 .prompt::before {
     cursor: default;
