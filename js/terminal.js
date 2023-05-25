@@ -56,7 +56,9 @@ class Terminal {
                 clearTimeout(addBack);
                 addBack = setTimeout(() => prompt.classList.add('prompt-caret'), 1);
             }
-            prompt.style.setProperty('--selection-pos', `calc(${pos[0] + 1 + 'ch'} + .5px)`); // what the hell is wrong with this font
+
+            // ok i have NO CLUE why but removing the +0px misalign the caret
+            prompt.style.setProperty('--selection-pos', `calc(${pos[0]}ch + 0px)`);
             prompt.style.setProperty('--selection-length', (len ? len : 1) + 'ch');
         };
 

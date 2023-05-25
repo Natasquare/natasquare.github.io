@@ -226,10 +226,11 @@ iframe {
     padding: 0;
 }
 .prompt {
-    --selection-pos: 1ch;
+    --selection-pos: 0;
     --selection-length: 1ch;
     margin: 10px;
     cursor: text;
+    position: relative;
 }
 .prompt .prompt-input {
     cursor: text;
@@ -266,6 +267,7 @@ iframe {
 .prompt-result {
     border-bottom: 3px var(--dark2) solid;
     padding: 10px;
+    border-left: 1px transparent solid;
 }
 .prompt-result:hover {
     background-color: var(--hl3);

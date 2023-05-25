@@ -20,7 +20,7 @@ $.q('#runt').onclick = () => {
 };
 
 $.qa('.button').forEach((x) =>
-    x.addEventListener('click', (e) => {
+    x.addEventListener('click', () => {
         x.classList.add('button-click');
         setTimeout(() => x.classList.remove('button-click'), 200); // too lazy to change this to the css var
     })
@@ -63,7 +63,7 @@ function createDragElement(name = 'unnamed', content) {
             else $.addClass(w, 'window-full');
             setTimeout(() => w.classList.remove('window-transitioning'), 200);
         }
-        w.style.zIndex = ++wcounter;
+        if (w.style.zIndex < wcounter) w.style.zIndex = ++wcounter;
     }
 
     el.style.top = el.style.left = Math.floor((Math.random() * Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight)) / 10) + 10 + 'px';
