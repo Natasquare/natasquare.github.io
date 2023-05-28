@@ -59,6 +59,7 @@ body {
     min-height: 100vh;
     mix-blend-mode: multiply;
     position: fixed;
+    z-index: -69;
 }
 
 .container {
