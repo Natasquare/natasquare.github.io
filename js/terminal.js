@@ -26,9 +26,12 @@ class Terminal {
     }
     log(...a) {
         if (a.length > 1) return a.forEach((x) => this.log(x));
-        let node = a[0] instanceof Element ? a[0] : document.createTextNode(a[0]),
-            l = this.term.children[this.term.childElementCount - 1];
-        (l && l.classList.contains('prompt-result') && !a[0]?.classList?.contains('prompt') ? l : this.term).appendChild(node);
+        let br = document.createElement('br'),
+            node = a[0] instanceof Element ? a[0] : document.createTextNode(a[0]),
+            l = this.term.children[this.term.childElementCount - 1],
+            target = l && l.classList.contains('prompt-result') && !a[0]?.classList?.contains('prompt') ? l : this.term;
+        target.appendChild(node);
+        if (node instanceof Text) target.appendChild(br);
     }
     clear() {
         let parent = this.term.parentNode;
@@ -84,13 +87,24 @@ class Terminal {
         this.input.focus();
     }
     handleCommand(x) {
+        if (!x.trim()) return true;
         let args = this.parse(x),
-            cmd = this.d.commands[args[0]];
-        if (!cmd) return terminal.log(`${args[0]}: command not found`);
-        return cmd(this, args.slice(1));
+            res;
+        for (let i = 0; i < args.data.length; ++i) {
+            let d = args.data[i],
+                m = args.multiple[i],
+                cmd = this.d.commands[d[0]];
+            if (!cmd) return terminal.log(`${args[0]}: command not found`);
+            res = cmd(this, d.slice(1));
+            if (!args.data[i + 1] || (m === '&' && !res)) return res;
+        }
+        return res;
     }
     parse(str) {
+        str = str.trim();
         let r = [],
+            more = false,
+            multiple = false,
             reading = false,
             escaped = false,
             chunk = '';
@@ -107,12 +121,23 @@ class Terminal {
                 } else if (QUOTES.includes(char) && !escaped && (reading ? reading === char : true)) {
                     if (!reading) reading = char;
                     else reading = false;
+                } else if (['&', '|'].includes(char) && !escaped) {
+                    if (i + 1 > str.length || str[i + 1] !== char) {
+                        chunk += char;
+                        continue;
+                    }
+                    multiple = char;
+                    more = this.parse(str.slice(i + 2));
+                    break;
                 } else chunk += char;
                 escaped = false;
             }
         }
-        if (!reading && !escaped) r.push(chunk);
-        return r;
+        if (!reading && !escaped && chunk) r.push(chunk);
+        return {
+            data: more ? [].concat([r], more.data) : [r],
+            multiple: more ? [].concat([multiple], more.multiple) : [multiple]
+        };
     }
 }
 
