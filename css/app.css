@@ -59,7 +59,6 @@ body {
     min-height: 100vh;
     mix-blend-mode: multiply;
     position: fixed;
-    z-index: -1;
 }
 
 .container {
@@ -124,7 +123,6 @@ body {
     border-radius: var(--radius) var(--radius) 0 0;
     border-bottom: 3px var(--dark2) solid;
     box-shadow: 0 1px 3px var(--dark);
-    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -160,7 +158,6 @@ body {
     transform: translate(-4px, -5px);
     box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), -1px -1px 1px #00000030, -2px -2px 4px #00000030, -3px -3px 4px #00000030,
         -4px -4px 4px #00000030;
-    z-index: -2;
 }
 .window .header .max {
     display: block;
@@ -185,7 +182,6 @@ body {
     transform: translate(-4px, -5px);
     box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2), 4px 4px 0 var(--dark2), -1px -1px 1px #00000030, -2px -2px 4px #00000030, -3px -3px 4px #00000030,
         -4px -4px 4px #00000030;
-    z-index: -2;
 }
 .window-full .header .max:hover {
     background-color: var(--yellow);
