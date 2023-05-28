@@ -4,6 +4,7 @@ commands.echo = (term, args) => (term.log(args[0] || ''), true);
 commands.clear = (term) => term.clear();
 
 commands.cd = (term, args) => {
+    if (!args[0]) return true;
     let read = term.d.fs.read(args[0], term.d.dir);
     if (!read) return term.log('cd: no such file or directory: ' + args[0]);
     if (read[0]) return term.log('cd: not a directory');
@@ -23,7 +24,7 @@ commands.ls = (term, args) => {
 };
 
 commands.cat = (term, args) => {
-    if (!args[0]) return;
+    if (!args[0]) return true;
     let read = term.d.fs.read(args[0], term.d.dir);
     if (!read) return term.log('cat: no such file or directory: ' + args[0]);
     if (!read[0]) return term.log('cat: is a directory');

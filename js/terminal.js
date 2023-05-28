@@ -94,10 +94,12 @@ class Terminal {
             let d = args.data[i],
                 m = args.multiple[i],
                 cmd = this.d.commands[d[0]];
-            if (!cmd) return terminal.log(`${args[0]}: command not found`);
+            if (!cmd) return terminal.log(`${d[0]}: command not found`);
             res = cmd(this, d.slice(1));
-            if (!args.data[i + 1] || (m === '&' && !res)) return res;
+            this.win.setName(args[0]);
+            if (!args.data[i + 1] || (m === '&' && !res)) break;
         }
+        this.win.setName(`ntsq@portfolio: ${this.d.dir}`);
         return res;
     }
     parse(str) {

@@ -9,13 +9,15 @@ let wcounter = 0;
 
 terminal = new Terminal({commands});
 
-let eawh = createDragElement('ntsq@portfolio: ~', terminal.term);
+let eawh = createDragElement('ntsq@portfolio: /', terminal.term);
+terminal.win = eawh;
 document.body.append(eawh.e);
 
 $.q('#runt').onclick = () => {
     terminal = new Terminal({commands});
 
-    let termel = createDragElement('ntsq@portfolio: ~', terminal.term);
+    let termel = createDragElement('ntsq@portfolio: /', terminal.term);
+    terminal.win = termel;
     document.body.append(termel.e);
 };
 
@@ -51,7 +53,13 @@ function createDragElement(name = 'unnamed', content) {
     $.addClass(content, 'content');
 
     el.onmousedown = () => focus(el);
-    focus(el);
+
+    function setName(ne) {
+        name = ne;
+        focus(el);
+        header.innerHTML = name;
+        header.append(max, close);
+    }
 
     function focus(w, full) {
         $.qa('.window').forEach((x) => x.classList.remove('window-active'));
@@ -64,12 +72,12 @@ function createDragElement(name = 'unnamed', content) {
             setTimeout(() => w.classList.remove('window-transitioning'), 200);
         }
         if (w.style.zIndex < wcounter) w.style.zIndex = ++wcounter;
+        if (document.title !== name) document.title = name;
     }
 
     el.style.top = el.style.left = Math.floor((Math.random() * Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight)) / 10) + 10 + 'px';
 
-    header.innerHTML = name;
-    header.append(max, close);
+    setName(name);
 
     close.onclick = () => {
         el.style.opacity = 0;
@@ -128,5 +136,5 @@ function createDragElement(name = 'unnamed', content) {
         el.style.height = height + rpos[2] + 'px';
     }
 
-    return {e: el, header, content, close};
+    return {e: el, header, content, close, name, setName};
 }
