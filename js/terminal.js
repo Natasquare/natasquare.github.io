@@ -1,22 +1,56 @@
+/* global TERM_HISTORY */
+TERM_HISTORY = [];
 class Terminal {
     constructor(d) {
         this.d = Object.assign(
             {
                 dir: '/',
                 fs: new FS({
-                    testdir: {
-                        testfile: ['TYPE', 'conten adswgqwhyjd']
-                    }
+                    personal: {
+                        'about.txt': [
+                            'txt',
+                            `I'm Natasquare. I like learning new things and making cool stuff.
+I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a huge music fan.`
+                        ],
+                        'links.md': [
+                            'txt/md',
+                            `[Github  ](//github.com/Natasquare/)
+[Discord ](//discord.com/users/696698254770831421)
+[Wakatime](//wakatime.com/@ntsq)
+[Last.fm ](//www.last.fm/user/natasquare)
+[Rickroll](//www.youtube.com/watch?v=dQw4w9WgXcQ)`
+                        ],
+                        'skills.md': [
+                            'txt/md',
+                            `+------------+-------------+
+|   Skills   |  Rating/10  |
++------------+-------------+
+| JavaScript | NaN         |
+| HTML       | 6u!joq      |
+| CSS        |         7   |
+|            | ++++++++++  |
+| Brainfuck  | [->+++++<]  |
+|            | >+++.       |
+| Typescript | TS1112      |
+| What am I  | doing with  |
+| my life    | right now   |
+| Lua        | nvim config |
++------------+-------------+`
+                        ]
+                    },
+                    'AMOGUS.txt': ['txt', 'not rn']
                 }),
-                commands: {}
+                commands: {},
+                scrollIndex: 0
             },
             d
         );
         this.term = document.createElement('div');
         this.init();
     }
+
     init() {
-        let {prompt, input} = this.createPrompt();
+        const {prompt, input} = this.createPrompt();
 
         this.prompt = prompt;
         this.input = input;
@@ -24,35 +58,41 @@ class Terminal {
         this.term.classList.add('content', 'terminal');
         this.log(this.prompt);
     }
+
     log(...a) {
         if (a.length > 1) return a.forEach((x) => this.log(x));
-        let br = document.createElement('br'),
+        const br = document.createElement('br'),
             node = a[0] instanceof Element ? a[0] : document.createTextNode(a[0]),
             l = this.term.children[this.term.childElementCount - 1],
-            target = l && l.classList.contains('prompt-result') && !a[0]?.classList?.contains('prompt') ? l : this.term;
+            target =
+                l && l.classList.contains('prompt-result') && !a[0]?.classList?.contains('prompt')
+                    ? l
+                    : this.term;
         target.appendChild(node);
         if (node instanceof Text) target.appendChild(br);
     }
+
     clear() {
-        let parent = this.term.parentNode;
+        const parent = this.term.parentNode;
         parent.removeChild(this.term);
         this.term = document.createElement('div');
         this.init();
         parent.appendChild(this.term);
     }
+
     createPrompt() {
-        let prompt = document.createElement('form');
+        const prompt = document.createElement('form');
         prompt.classList.add('prompt', 'prompt-caret');
         prompt.setAttribute('dir', this.d.dir);
-        let input = document.createElement('input');
+        const input = document.createElement('input');
         input.classList.add('prompt-input');
         prompt.appendChild(input);
 
-        prompt.onsubmit = this.handleInput.bind(this);
+        prompt.onsubmit = async(...a) => await this.handleInput(...a);
         input.onselectionchange = () => {
-            let pos = [input.selectionStart, input.selectionEnd],
-                len = pos[1] - pos[0],
-                addBack;
+            const pos = [input.selectionStart, input.selectionEnd],
+                len = pos[1] - pos[0];
+            let addBack;
             prompt.classList.remove('prompt-caret');
             if (pos[0] === input.value.length || len === 0) {
                 // no other choices
@@ -62,22 +102,47 @@ class Terminal {
 
             // ok i have NO CLUE why but removing the +0px misalign the caret
             prompt.style.setProperty('--selection-pos', `calc(${pos[0]}ch + 0px)`);
-            prompt.style.setProperty('--selection-length', (len ? len : 1) + 'ch');
+            prompt.style.setProperty('--selection-length', (len || 1) + 'ch');
+        };
+        input.onkeydown = (e) => {
+            if (
+                ['ArrowUp', 'ArrowDown'].indexOf(e.key) === -1 ||
+                e.ctrlKey ||
+                e.altKey ||
+                e.metaKey ||
+                e.shiftKey
+            ) {
+                return;
+            }
+            e.preventDefault();
+            const scrollIndex = this.d.scrollIndex;
+            this.d.scrollIndex = Math.max(
+                Math.min(scrollIndex + (e.key === 'ArrowUp' ? -1 : 1), TERM_HISTORY.length - 1),
+                0
+            );
+            input.value = TERM_HISTORY[this.d.scrollIndex];
         };
 
         return {prompt, input};
     }
-    handleInput(e) {
+
+    async handleInput(e) {
         e.preventDefault();
-        let wrapped = document.createElement('div'),
+        if (this.input.value.trim()) {
+            TERM_HISTORY.push(this.input.value);
+            this.d.scrollIndex = TERM_HISTORY.length;
+        }
+        const wrapped = document.createElement('div'),
             {prompt, input} = this.createPrompt();
         input.value = this.input.value;
         input.disabled = true;
         wrapped.appendChild(prompt);
         wrapped.classList.add('prompt-result');
+        wrapped.style.display = 'none';
         this.log(wrapped);
-        let handled = this.handleCommand(this.input.value),
+        const handled = await this.handleCommand(this.input.value),
             ne = this.createPrompt();
+        wrapped.style.display = 'block';
         this.term.removeChild(this.prompt);
         this.prompt = ne.prompt;
         this.input = ne.input;
@@ -86,33 +151,35 @@ class Terminal {
         this.log(this.prompt);
         this.input.focus();
     }
-    handleCommand(x) {
+
+    async handleCommand(x) {
         if (!x.trim()) return true;
-        let args = this.parse(x),
-            res;
+        const args = this.parse(x);
+        let res;
         for (let i = 0; i < args.data.length; ++i) {
-            let d = args.data[i],
+            const d = args.data[i],
                 m = args.multiple[i],
                 cmd = this.d.commands[d[0]];
-            if (!cmd) return terminal.log(`${d[0]}: command not found`);
-            res = cmd(this, d.slice(1));
-            this.win.setName(args[0]);
+            if (!cmd) return this.log(`${d[0]}: command not found`);
+            this.win.setName(d.join(' '));
+            res = await cmd(this, d.slice(1));
             if (!args.data[i + 1] || (m === '&' && !res)) break;
         }
         this.win.setName(`ntsq@portfolio: ${this.d.dir}`);
         return res;
     }
+
     parse(str) {
         str = str.trim();
-        let r = [],
-            more = false,
+        const r = [],
+            QUOTES = ['"', "'"];
+        let more = false,
             multiple = false,
             reading = false,
             escaped = false,
             chunk = '';
-        const QUOTES = ['"', "'"];
         for (let i = 0; i < str.length; ++i) {
-            let char = str[i];
+            const char = str[i];
             if (char === ' ' && !reading) {
                 r.push(chunk);
                 chunk = '';
@@ -120,7 +187,11 @@ class Terminal {
                 if (char === '\\' && !escaped) {
                     escaped = true;
                     continue;
-                } else if (QUOTES.includes(char) && !escaped && (reading ? reading === char : true)) {
+                } else if (
+                    QUOTES.includes(char) &&
+                    !escaped &&
+                    (reading ? reading === char : true)
+                ) {
                     if (!reading) reading = char;
                     else reading = false;
                 } else if (['&', '|'].includes(char) && !escaped) {
@@ -147,6 +218,7 @@ class FS {
     constructor(fs = {}) {
         this.fs = fs;
     }
+
     read(path, from = '/') {
         path = this.parseRelativePath(path, from);
         if (!path) return;
@@ -159,6 +231,7 @@ class FS {
         }
         return cur;
     }
+
     parseRelativePath(path, cur) {
         let abs = {};
         try {

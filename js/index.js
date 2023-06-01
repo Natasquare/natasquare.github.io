@@ -1,3 +1,4 @@
+/* global $ */
 $ = {
     create: (...a) => document.createElement(...a),
     q: (...a) => document.querySelector(...a),
@@ -7,16 +8,17 @@ $ = {
 
 let wcounter = 0;
 
+/* global terminal, Terminal, commands */
 terminal = new Terminal({commands});
 
-let eawh = createDragElement('ntsq@portfolio: /', terminal.term);
+const eawh = createDragElement('ntsq@portfolio: /', terminal.term);
 terminal.win = eawh;
 document.body.append(eawh.e);
 
 $.q('#runt').onclick = () => {
     terminal = new Terminal({commands});
 
-    let termel = createDragElement('ntsq@portfolio: /', terminal.term);
+    const termel = createDragElement('ntsq@portfolio: /', terminal.term);
     terminal.win = termel;
     document.body.append(termel.e);
 };
@@ -29,7 +31,7 @@ $.qa('.button').forEach((x) =>
 );
 
 function createDragElement(name = 'unnamed', content) {
-    let dpos = [0, 0, 0, 0],
+    const dpos = [0, 0, 0, 0],
         rpos = [0, 0, 0, 0];
 
     content ??= $.create('div');
@@ -41,6 +43,7 @@ function createDragElement(name = 'unnamed', content) {
         resize = $.create('div');
 
     el.style.setProperty('--starting-width', `calc(${name.length}ch + 74px + 2em)`); // gotta love hardcoding
+    el.style.zIndex = ++wcounter;
 
     $.addClass(el, 'window window-movable');
 
@@ -66,16 +69,25 @@ function createDragElement(name = 'unnamed', content) {
         $.addClass(w, 'window-active');
         if (full) {
             w.classList.add('window-transitioning');
-            let rm = w.classList.contains('window-full');
+            const rm = w.classList.contains('window-full');
             if (rm) w.classList.remove('window-full');
             else $.addClass(w, 'window-full');
             setTimeout(() => w.classList.remove('window-transitioning'), 200);
         }
-        if (w.style.zIndex < wcounter) w.style.zIndex = ++wcounter;
+        if (Number(w.style.zIndex) < wcounter) w.style.zIndex = ++wcounter;
         if (document.title !== name) document.title = name;
     }
 
-    el.style.top = el.style.left = Math.floor((Math.random() * Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight)) / 10) + 10 + 'px';
+    el.style.top = el.style.left =
+        Math.floor(
+            (Math.random() *
+                Math.min(
+                    document.documentElement.clientWidth,
+                    document.documentElement.clientHeight
+                )) /
+                10 +
+                10
+        ) + 'px';
 
     setName(name);
 
@@ -126,8 +138,8 @@ function createDragElement(name = 'unnamed', content) {
     function elementResize(e) {
         e = e || window.event;
         e.preventDefault();
-        var width = el.offsetWidth;
-        var height = el.offsetHeight;
+        const width = el.offsetWidth,
+            height = el.offsetHeight;
 
         rpos[1] = e.clientX - width - el.offsetLeft;
         rpos[2] = e.clientY - height - el.offsetTop;
