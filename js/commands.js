@@ -72,10 +72,8 @@ commands.fetch = async(term, args) => {
                 {data} = await res.json();
             term.log(`󰓹  ${data.discord_user.username}#${data.discord_user.discriminator}
 ────── ──  ─
-󰀉  ID
-|  ${data.discord_user.id}
-󰐰  Status
-|  ${data.discord_status[0].toUpperCase() + data.discord_status.slice(1)} (${
+󰀉  ${data.discord_user.id}
+󰐰  ${data.discord_status[0].toUpperCase() + data.discord_status.slice(1)} (${
     ['web', 'mobile', 'desktop']
         .filter((x) => data[`active_on_discord_${x}`])
         .join(' - ') || 'Probably sleeping'
@@ -107,20 +105,15 @@ ${
             term.log(`󰓹  ${getBrowser()}
 ────── ──  ─
 󰔃  Screen
-|  󰆾  Size
-|  |  ${screen.width}x${screen.height}
-|  󰉼  Color depth
-|  |  ${screen.colorDepth} bits
+|  󰆾  ${screen.width}x${screen.height}
+|  󰉼  ${screen.colorDepth} bits
 󰞂  Navigator
-|  󰆘  Cookies
-|  |  ${navigator.cookieEnabled ? 'Enabled' : 'Disabled'}
-|  󰀉  User agent
-|  |  ${navigator.userAgent
+|  󰆘  Cookies ${navigator.cookieEnabled ? 'enabled' : 'disabled'}
+|  󰀉  ${navigator.userAgent
         .match(/\(.+\)|.+? +?/g)
         .map((x) => x.trim())
         .join('\n|  |  ')}
-|    Language
-|  |  ${navigator.language}`),
+|    ${navigator.language}`),
         fm: async() => {
             const d = await getFmData();
             if (!d[0]?.title) {
