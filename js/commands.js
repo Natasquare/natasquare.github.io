@@ -141,7 +141,13 @@ ${d
         )
         .join('\n')}`
             );
-        }
+        },
+        /**
+         * @request 637648484979441706
+         */
+        girls: async() =>
+            term.log(`󰀨  Girls not detected
+|  No bitches? :megamind:`)
     };
     if (!args[0] || !d[args[0]]) {
         return term.log(
@@ -233,3 +239,32 @@ function decodeHtml(html) {
     txt.innerHTML = html;
     return txt.value;
 }
+
+/**
+ * @request 714721111258169355
+ */
+commands.uwu = async(term, args) => {
+    if (!args[0]) term.log('uwu');
+    else {
+        const faces = ['OwO', 'UwU', '>w<', 'uWu', ':3', 'ÙwÚ', 'QwQ', 'uwu', 'owo'];
+        term.log(
+            args[0]
+                .toLowerCase()
+                .replace(/[lr]/g, 'w')
+                .replace(/[LR]/g, 'W')
+                .replace(/n([aeiou])/g, 'ny$1')
+                .replace(/N([aeiou])/g, 'Ny$1')
+                .replace(/N([AEIOU])/g, 'Ny$1')
+                .replace(/ove/g, 'uv')
+                .replace(
+                    /([!.,]+)/g,
+                    (_, x) =>
+                        ` ${faces[Math.floor(Math.random() * faces.length)]}${','.repeat(
+                            x.length * ~~({'!': 2, '.': 1.5}[x[x.length - 1]] || 1) +
+                                (x[x.length - 1] !== ',')
+                        )}`
+                )
+        );
+    }
+    return true;
+};
