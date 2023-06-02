@@ -70,29 +70,29 @@ commands.fetch = async(term, args) => {
             const API = 'https://api.lanyard.rest/v1/users/696698254770831421',
                 res = await fetch(API),
                 {data} = await res.json();
-            term.log(`  ${data.discord_user.username}#${data.discord_user.discriminator}
+            term.log(`󰓹  ${data.discord_user.username}#${data.discord_user.discriminator}
 ────── ──  ─
-  ID
+󰀉  ID
 |  ${data.discord_user.id}
-  Status
+󰐰  Status
 |  ${data.discord_status[0].toUpperCase() + data.discord_status.slice(1)} (${
     ['web', 'mobile', 'desktop']
         .filter((x) => data[`active_on_discord_${x}`])
         .join(' - ') || 'Probably sleeping'
 })
-  Activit${data.activities.length > 1 ? 'ies' : 'y'}
+󰐌  Activit${data.activities.length > 1 ? 'ies' : 'y'}
 ${
     data.activities
         .map(
             (x) =>
                 `|  ${
                     [
-                        '  Playing',
+                        '󰊗  Playing',
                         '󰑋  Streaming',
-                        '  Listening to',
+                        '󰝚  Listening to',
                         '󰑈  Watching',
-                        ' ',
-                        '  Competing in'
+                        '󰦨 ',
+                        '󱐋  Competing in'
                     ][x.type]
                 } ${x.name}${[x.details, x.state]
                     .filter(Boolean)
@@ -104,25 +104,50 @@ ${
 `);
         },
         browser: async() =>
-            term.log(`  ${getBrowser()}
+            term.log(`󰓹  ${getBrowser()}
 ────── ──  ─
 󰔃  Screen
-|    Size
+|  󰆾  Size
 |  |  ${screen.width}x${screen.height}
-|    Color depth
+|  󰉼  Color depth
 |  |  ${screen.colorDepth} bits
 󰞂  Navigator
 |  󰆘  Cookies
 |  |  ${navigator.cookieEnabled ? 'Enabled' : 'Disabled'}
-|    User agent
+|  󰀉  User agent
 |  |  ${navigator.userAgent
         .match(/\(.+\)|.+? +?/g)
         .map((x) => x.trim())
         .join('\n|  |  ')}
-|    Language
-|  |  ${navigator.language}`)
+|    Language
+|  |  ${navigator.language}`),
+        fm: async() => {
+            const d = await getFmData();
+            if (!d[0]?.title) {
+                return term.log('fetch: an unexpected error occured, please make an issue');
+            }
+            term.log(
+                `󰓎  Recent tracks from Last.fm
+────── ──  ─ 
+${d
+        .map(
+            (x) => `${x.loved ? '󰣐' : '󱢠'}  ${x.title
+                .match(/\(.+\)|[^(]+/g)
+                .map((x) => x.trim())
+                .join('\n|  ')}
+󰠃  ${x.artist}
+󰥔  ${x.time.join('\n|  ')}
+────── ──  ─`
+        )
+        .join('\n')}`
+            );
+        }
     };
-    if (!args[0] || !d[args[0]]) return term.log('fetch: choose between `browser` and `discord`');
+    if (!args[0] || !d[args[0]]) {
+        return term.log(
+            `fetch: choose an option from this list: \`${Object.keys(d).sort().join('`, `')}\``
+        );
+    }
     await d[args[0]]();
     return true;
 };
@@ -158,3 +183,53 @@ commands.history = async(term, args) => {
     );
     return true;
 };
+
+/* don't fucking ask me how this works, it just does */
+async function getFmData() {
+    let res = await fetch(
+        'https://953a29d3-dd81-419a-98da-b9660425be7d.id.repl.co/fuckcors?q=https://last.fm/user/natasquare'
+    );
+    res = decodeHtml(await res.text());
+    const tracks = res.match(/<tr[^]+?data-recenttrack-id=?[^]+?<\/tr>/g),
+        r = [];
+    for (const track of tracks) {
+        const meta = track
+                .match(/title=".+"/g)
+                .filter((x) => !x.includes('Play on'))
+                .map((x, i) => {
+                    const m = [x.replace(/title="(.+)"/g, '$1')];
+                    if (i === 2) {
+                        m.push(
+                            track
+                                .match(/<td[^]*?<\/td>/g)
+                                .filter((x) => x.includes(m[0]))[0]
+                                .match(/title=".+">\s+.+\s+<\/span>/g)[0]
+                                .replace(/title=".+">\s+(.+)\s+<\/span>/g, '$1')
+                        );
+                    }
+                    return m;
+                })
+                .flat(Infinity),
+            loved =
+                track
+                    .match(/chartlist-love-button"[^]+?<\/span>/g)
+                    .filter((x) => x.includes('Natasquare loves this track'))
+                    .map(Boolean)[0] || false;
+        r.push({
+            title: meta[0],
+            artist: meta[1],
+            time: meta[2] ? [meta[2], meta[3]] : ['Scrobbling now'],
+            loved
+        });
+    }
+    return r;
+}
+
+/**
+ * @link https://stackoverflow.com/a/7394787/18412379
+ */
+function decodeHtml(html) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+}
