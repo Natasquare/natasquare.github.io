@@ -108,19 +108,19 @@ ${
 ────── ──  ─
 󰔃  Screen
 |    Size
-|  | ${screen.width}x${screen.height}
+|  |  ${screen.width}x${screen.height}
 |    Color depth
-|  | ${screen.colorDepth} bits
+|  |  ${screen.colorDepth} bits
 󰞂  Navigator
 |  󰆘  Cookies
-|  | ${navigator.cookieEnabled ? 'Enabled' : 'Disabled'}
+|  |  ${navigator.cookieEnabled ? 'Enabled' : 'Disabled'}
 |    User agent
-|  | ${navigator.userAgent
+|  |  ${navigator.userAgent
         .match(/\(.+\)|.+? +?/g)
         .map((x) => x.trim())
-        .join('\n|  | ')}
+        .join('\n|  |  ')}
 |    Language
-|  | ${navigator.language}`)
+|  |  ${navigator.language}`)
     };
     if (!args[0] || !d[args[0]]) return term.log('fetch: choose between `browser` and `discord`');
     await d[args[0]]();
