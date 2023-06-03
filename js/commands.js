@@ -70,6 +70,7 @@ commands.fetch = async(term, args) => {
             const API = 'https://api.lanyard.rest/v1/users/696698254770831421',
                 res = await fetch(API),
                 {data} = await res.json();
+            if (!data?.discord_user?.username) return term.log('fetch: could not get info');
             term.log(`󰓹  ${data.discord_user.username}#${data.discord_user.discriminator}
 ────── ──  ─
 󰀉  ${data.discord_user.id}
@@ -100,8 +101,9 @@ ${
         .join('\n') || '| Procrastinating'
 }
 `);
+            return true;
         },
-        browser: async() =>
+        browser: async() => (
             term.log(`󰓹  ${getBrowser()}
 ────── ──  ─
 󰔃  Screen
@@ -110,10 +112,12 @@ ${
 󰞂  Navigator
 |  󰆘  Cookies ${navigator.cookieEnabled ? 'enabled' : 'disabled'}
 |  󰀉  ${navigator.userAgent
-        .match(/\(.+\)|.+? +?/g)
-        .map((x) => x.trim())
-        .join('\n|  |  ')}
+                .match(/\(.+\)|.+? +?/g)
+                .map((x) => x.trim())
+                .join('\n|  |  ')}
 |    ${navigator.language}`),
+            true
+        ),
         fm: async() => {
             const d = await getFmData();
             if (!d.recent && !d.data) {
@@ -127,7 +131,6 @@ ${
                     );
                 }
                 const cur = d.recent.find((x) => x.timestamp[0] === 'Scrobbling now');
-                console.log(d.recent, cur);
                 term.log(
                     `󰓹  Natasquare
 ────── ──  ─
@@ -177,21 +180,61 @@ ${d.recent
         .join('\n')}`
                 );
             }
+            return true;
         },
         /**
          * @request 637648484979441706
          */
         girls: async() =>
             term.log(`󰀨  Girls not detected
-|  No bitches? :megamind:`)
+|  No bitches? :megamind:`),
+        git: async() => {
+            /**
+             * @link https://github.com/shinnn/github-username-regex
+             */
+            let target = 'natasquare',
+                type = 'users';
+            if (args[1]) target = args[1];
+            if (!/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(target)) {
+                return term.log('fetch: invalid username');
+            }
+            if (args[2]) {
+                if (!/^[A-Za-z0-9_.-]{1,100}$/g.test(args[2])) {
+                    return term.log('fetch: invalid repository name');
+                }
+                target += '/' + args[2];
+                type = 'repos';
+            }
+            const API = `https://api.github.com/${type}/${target}`;
+            let d = await fetch(API);
+            d = await d.json();
+            if (type === 'users') {
+                if (!d.login) return term.log('fetch: user not found');
+                term.log(`󰓹  ${d.login}${d.bio ? `\n|  ${d.bio}` : ''}
+────── ──  ─
+󰀉  ${d.id}${d.company ? '\n󰅆  ' + d.company : ''}${d.blog ? '\n  ' + d.blog : ''}${
+    d.location ? '\n  ' + d.location : ''
+}
+  ${d.public_repos} public repos
+  ${d.followers} followers
+|  ${d.following} following`);
+            } else {
+                if (!d.name) return term.log('fetch: repository not found');
+                term.log(`󰓹  ${d.name}${d.description ? '\n|  ' + d.description : ''}
+────── ──  ─
+󰓎 ${d.stargazers_count} 󰧟 󰐠 ${d.watchers_count} 󰧟  ${d.forks_count}${
+    d.license ? '\n󰿃  ' + d.license.name : ''
+}${d.language ? '\n󰈮  ' + d.language : ''}`);
+            }
+            return true;
+        }
     };
     if (!args[0] || !d[args[0]]) {
         return term.log(
             `fetch: choose an option from this list: \`${Object.keys(d).sort().join('`, `')}\``
         );
     }
-    await d[args[0]]();
-    return true;
+    return await d[args[0]]();
 };
 
 /**
