@@ -116,24 +116,64 @@ ${
 |    ${navigator.language}`),
         fm: async() => {
             const d = await getFmData();
-            if (!d[0]?.title) {
-                return term.log('fetch: an unexpected error occured, please make an issue');
+            if (!d.recent && !d.data) {
+                return term.log('fetch: could not fetch any data');
             }
-            term.log(
-                `󰓎  Recent tracks from Last.fm
+            if (args[1] !== 'recent') {
+                if (!d.data) {
+                    return term.log(
+                        'fetch: could not fetch data' +
+                            (d.recent ? ', try `fetch fm recent` for recent tracks' : '')
+                    );
+                }
+                const cur = d.recent.find((x) => x.timestamp[0] === 'Scrobbling now');
+                console.log(d.recent, cur);
+                term.log(
+                    `󰓹  Natasquare
+────── ──  ─
+󰠃  Artists
+|  ${d.data.artists}
+󰣐  Loved tracks
+|  ${d.data.loved_tracks}
+󰐌  Scrobbles
+|  ${d.data.scrobbles}${
+    d.data.topTrack
+        ? `
+󰓎  Weekly top track
+|  󰝚  ${d.data.topTrack.title}
+|  󰠃  ${d.data.topTrack.artist}`
+        : ''
+}${
+    cur
+        ? `
+󰋋  Current track
+|  󰝚  ${cur.title
+        .match(/\(.+\)|[^(]+/g)
+        .map((x) => x.trim())
+        .join('\n|  ')}
+|  󰠃  ${cur.artist}
+`
+        : ''
+}`
+                );
+            } else {
+                if (!d.recent) return term.log('fetch: could not fetch recent data');
+                term.log(
+                    `󰓎  Recent tracks
 ────── ──  ─ 
-${d
+${d.recent
         .map(
             (x) => `${x.loved ? '󰣐' : '󱢠'}  ${x.title
                 .match(/\(.+\)|[^(]+/g)
                 .map((x) => x.trim())
                 .join('\n|  ')}
 󰠃  ${x.artist}
-󰥔  ${x.time.join('\n|  ')}
+󰥔  ${x.timestamp.join('\n|  ')}
 ────── ──  ─`
         )
         .join('\n')}`
-            );
+                );
+            }
         },
         /**
          * @request 637648484979441706
@@ -183,45 +223,61 @@ commands.history = async(term, args) => {
     return true;
 };
 
-/* don't fucking ask me how this works, it just does */
+/* shoutout to bard for giving me the idea */
 async function getFmData() {
-    let res = await fetch(
-        'https://953a29d3-dd81-419a-98da-b9660425be7d.id.repl.co/fuckcors?q=https://last.fm/user/natasquare'
-    );
-    res = decodeHtml(await res.text());
-    const tracks = res.match(/<tr[^]+?data-recenttrack-id=?[^]+?<\/tr>/g),
-        r = [];
-    for (const track of tracks) {
-        const meta = track
-                .match(/title=".+"/g)
-                .filter((x) => !x.includes('Play on'))
-                .map((x, i) => {
-                    const m = [x.replace(/title="(.+)"/g, '$1')];
-                    if (i === 2) {
-                        m.push(
-                            track
-                                .match(/<td[^]*?<\/td>/g)
-                                .filter((x) => x.includes(m[0]))[0]
-                                .match(/title=".+">\s+.+\s+<\/span>/g)[0]
-                                .replace(/title=".+">\s+(.+)\s+<\/span>/g, '$1')
-                        );
-                    }
-                    return m;
-                })
-                .flat(Infinity),
-            loved =
-                track
-                    .match(/chartlist-love-button"[^]+?<\/span>/g)
-                    .filter((x) => x.includes('Natasquare loves this track'))
-                    .map(Boolean)[0] || false;
-        r.push({
-            title: meta[0],
-            artist: meta[1],
-            time: meta[2] ? [meta[2], meta[3]] : ['Scrobbling now'],
-            loved
-        });
+    let recent = null,
+        data = null,
+        d = await fetch(
+            // eslint-disable-next-line max-len
+            'https://953a29d3-dd81-419a-98da-b9660425be7d.id.repl.co/fuckcors?q=https://last.fm/user/natasquare'
+        );
+    d = await d.text();
+
+    const doc = document.createElement('div');
+    doc.innerHTML = d.replace(/<head>[^]+<\/head>/g, '').replace(/<script>[^]+<\/script>/);
+
+    const tracklistDiv = doc.querySelector('.chartlist'),
+        topTrackDiv = doc.querySelector('.header-featured-track'),
+        statDiv = doc.querySelector('.header-metadata');
+
+    if (tracklistDiv) {
+        recent = [];
+        const tracks = tracklistDiv.querySelectorAll('.chartlist-row');
+
+        for (const track of tracks) {
+            const artist = track.querySelector('.chartlist-artist').textContent.trim(),
+                title = track.querySelector('.chartlist-name').textContent.trim(),
+                cover = track.querySelector('.cover-art img').src,
+                loved =
+                    track
+                        .querySelector('.chartlist-loved div')
+                        .getAttribute('data-toggle-button-current-state') === 'loved';
+            let timestamp = track.querySelector('.chartlist-timestamp span');
+            timestamp = [timestamp.title, timestamp.textContent.trim()].filter(Boolean);
+
+            recent.push({title, artist, cover, timestamp, loved});
+        }
     }
-    return r;
+    if (!topTrackDiv && !statDiv) return {recent, data};
+    data = {};
+    if (topTrackDiv) {
+        const title = topTrackDiv.querySelector('.featured-item-name').textContent.trim(),
+            artist = topTrackDiv.querySelector('.featured-item-artist').textContent.trim(),
+            cover = topTrackDiv.querySelector('.cover-art img').src;
+        data.topTrack = {title, artist, cover};
+    }
+    if (statDiv) {
+        for (const item of statDiv.querySelectorAll('.header-metadata-item')) {
+            const key = item
+                    .querySelector('.header-metadata-title')
+                    .textContent.trim()
+                    .toLowerCase()
+                    .replace(/ +/g, '_'),
+                value = item.querySelector('.header-metadata-display').textContent.trim();
+            data[key] = value;
+        }
+    }
+    return {recent, data};
 }
 
 /**
