@@ -275,7 +275,7 @@ async function getFmData() {
         data = null,
         d = await fetch(
             // eslint-disable-next-line max-len
-            'https://953a29d3-dd81-419a-98da-b9660425be7d.id.repl.co/fuckcors?q=https://last.fm/user/natasquare'
+            'https://15dcbf41-bb8a-45f6-bb32-16be4553f06c.id.repl.co/fuckcors?q=https://last.fm/user/natasquare'
         );
     d = await d.text();
 

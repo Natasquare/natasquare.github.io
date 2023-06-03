@@ -128,6 +128,7 @@ I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a
 
     async handleInput(e) {
         e.preventDefault();
+        this.prompt.onsubmit = (e) => e.preventDefault();
         if (this.input.value.trim()) {
             TERM_HISTORY.push(this.input.value);
             this.d.scrollIndex = TERM_HISTORY.length;
