@@ -133,8 +133,6 @@ ${
 ────── ──  ─
 󰠃  Artists
 |  ${d.data.artists}
-󰣐  Loved tracks
-|  ${d.data.loved_tracks}
 󰐌  Scrobbles
 |  ${d.data.scrobbles}${
     d.data.topTrack
@@ -151,8 +149,13 @@ ${
         .match(/\(.+\)|[^(]+/g)
         .map((x) => x.trim())
         .join('\n|  ')}
-|  󰠃  ${cur.artist}
-`
+|  󰠃  ${cur.artist}`
+        : ''
+}${
+    d.recent
+        ? `
+󰋼  Use \`fetch fm recent\`
+|  for recent tracks`
         : ''
 }`
                 );
