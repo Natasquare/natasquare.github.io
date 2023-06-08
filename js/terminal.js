@@ -10,20 +10,20 @@ class Terminal {
                         'about.txt': [
                             'txt',
                             `I'm Natasquare. I like learning new things and making cool stuff.
-I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a huge music fan.`
+I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a huge music fan.`,
                         ],
                         'links.md': [
                             'txt/md',
-                            `[Github  ](//github.com/Natasquare/)
-[Discord ](//discord.com/users/696698254770831421)
+                            `[Github](//github.com/Natasquare/)
+[Discord](//discord.com/users/696698254770831421)
 [Wakatime](//wakatime.com/@ntsq)
-[Last.fm ](//www.last.fm/user/natasquare)
-[Rickroll](//www.youtube.com/watch?v=dQw4w9WgXcQ)`
+[Last.fm](//www.last.fm/user/natasquare)
+[Rickroll](//www.youtube.com/watch?v=dQw4w9WgXcQ)`,
                         ],
                         'skills.md': [
                             'txt/md',
                             `+------------+-------------+
-|   Skills   |  Rating/10  |
+|   **[#78aad8:Skills]**   |  **[#78aad8:Rating/10]**  |
 +------------+-------------+
 | JavaScript | NaN         |
 | HTML       | 6u!joq      |
@@ -35,13 +35,34 @@ I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a
 | What am I  | doing with  |
 | my life    | right now   |
 | Lua        | nvim config |
-+------------+-------------+`
-                        ]
++------------+-------------+`,
+                        ],
                     },
-                    'AMOGUS.txt': ['txt', 'not rn']
+                    'AMOGUS.txt': [
+                        'txt',
+                        `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣤⣤⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⠟⠉⠉⠉⠉⠉⠉⠉⠙⠻⢶⣄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣷⡀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⡟⠀⣠⣶⠛⠛⠛⠛⠛⠛⠳⣦⡀⠀⠘⣿⡄⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠁⠀⢹⣿⣦⣀⣀⣀⣀⣀⣠⣼⡇⠀⠀⠸⣷⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⡏⠀⠀⠀⠉⠛⠿⠿⠿⠿⠛⠋⠁⠀⠀⠀⠀⣿⡄⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡇⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣧⠀
+⠀⠀⠀⠀⠀⠀⠀⢸⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⠀
+⠀⠀⠀⠀⠀⠀⠀⣾⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀
+⠀⠀⠀⠀⠀⠀⢰⣿⠀⠀⠀⠀⣠⡶⠶⠿⠿⠿⠿⢷⣦⠀⠀⠀⠀⠀⠀⠀⣿⠀
+⠀⠀⣀⣀⣀⠀⣸⡇⠀⠀⠀⠀⣿⡀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⣿⠀
+⣠⡿⠛⠛⠛⠛⠻⠀⠀⠀⠀⠀⢸⣇⠀⠀⠀⠀⠀⠀⣿⠇⠀⠀⠀⠀⠀⠀⣿⠀
+⢻⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⡟⠀⠀⢀⣤⣤⣴⣿⠀⠀⠀⠀⠀⠀⠀⣿⠀
+⠈⠙⢷⣶⣦⣤⣤⣤⣴⣶⣾⠿⠛⠁⢀⣶⡟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡟⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣆⡀⠀⠀⠀⠀⠀⠀⢀⣠⣴⡾⠃⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⢿⣿⣾⣿⡿⠿⠟⠋⠁⠀⠀⠀`,
+                    ],
                 }),
                 commands: {},
-                scrollIndex: 0
+                scrollIndex: 0,
             },
             d
         );
@@ -62,14 +83,39 @@ I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a
     log(...a) {
         if (a.length > 1) return a.forEach((x) => this.log(x));
         const br = document.createElement('br'),
-            node = a[0] instanceof Element ? a[0] : document.createTextNode(a[0]),
+            node = a[0] instanceof Element ? a[0] : this.parseMd(a[0]),
             l = this.term.children[this.term.childElementCount - 1],
             target =
                 l && l.classList.contains('prompt-result') && !a[0]?.classList?.contains('prompt')
                     ? l
                     : this.term;
         target.appendChild(node);
-        if (node instanceof Text) target.appendChild(br);
+        if (!(a[0] instanceof Element)) target.appendChild(br);
+    }
+
+    parseMd(md) {
+        const RULES = [
+                [
+                    /&lt;!(.*?)&gt;&lt;([^]*?)&gt;/g,
+                    '<div class="inline-block" style="--block-height:$1em">$2</div>',
+                ],
+                [/\*\*(.*?)\*\*/g, '<strong>$1</strong>'],
+                [/\*(.*?)\*/g, '<em>$1</em>'],
+                [/`(.*?)`/g, '<code>$1</code>'],
+                [/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">'],
+                [/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>'],
+                [/__(.*?)__/g, '<span class="underline">$1</span>'],
+                [/~~(.*?)~~/g, '<span class="strikethrough">$1</span>'],
+                [/\[(#[0-9abcdef]{3,8}):(.*?)\]/g, '<span style="color:$1">$2</span>'],
+                [/&lt;center&gt;([^]*?)&lt;\/center&gt;/g, '<div class="center">$1</div>'],
+            ],
+            div = document.createElement('div');
+        let txt = encodeHtml(md);
+        for (const rule of RULES) {
+            txt = txt.replace(rule[0], rule[1]);
+        }
+        div.innerHTML = txt;
+        return div;
     }
 
     clear() {
@@ -210,7 +256,7 @@ I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a
         if (!reading && !escaped && chunk) r.push(chunk);
         return {
             data: more ? [].concat([r], more.data) : [r],
-            multiple: more ? [].concat([multiple], more.multiple) : [multiple]
+            multiple: more ? [].concat([multiple], more.multiple) : [multiple],
         };
     }
 }
@@ -240,4 +286,11 @@ class FS {
         } catch {}
         return abs.pathname;
     }
+}
+
+function encodeHtml(html) {
+    const div = document.createElement('div'),
+        node = document.createTextNode(html);
+    div.append(node);
+    return div.innerHTML;
 }

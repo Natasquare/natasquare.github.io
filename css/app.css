@@ -15,7 +15,7 @@
     --yellow-hl2: #ebcb8b10;
     --green: #8ebc67;
     --orange: #d08770;
-    --main-font-f: 'JetBrains Mono', 'JetBrains Mono NF', 'Zen Maru Gothic', monospace;
+    --main-font-f: 'JetBrains Mono', 'JetBrains Mono NF', 'Sarasa', monospace;
     --main-font-s: 22px;
     --radius: 4px;
     --transition: 200ms;
@@ -44,6 +44,12 @@
 @font-face {
     font-family: 'JetBrains Mono NF';
     src: url('/assets/JetBrainsMonoNerdFont.ttf') format('truetype');
+}
+
+/* sarasa mono for multi lang support */
+@font-face {
+    font-family: 'Sarasa';
+    src: url(https://picaq.github.io/fonts/Sarasa-Mono-J-Regular.woff2) format('woff2');
 }
 
 body {
@@ -114,6 +120,7 @@ body {
 .window .content {
     /* border-radius: var(--radius); */
     overflow: auto;
+    overflow-x: hidden;
 }
 .window .header {
     background-color: var(--accent);
@@ -259,6 +266,7 @@ iframe {
     width: var(--selection-length);
     position: absolute;
     left: var(--selection-pos);
+    overflow: hidden;
     pointer-events: none;
 }
 .prompt-caret::after {
@@ -304,4 +312,48 @@ iframe {
 }
 .warn:hover {
     background-color: var(--yellow-hl2);
+}
+.prompt-result a,
+.prompt-result .underline,
+.prompt-result .strikethrough {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: var(--hl2);
+    transition: text-decoration-color var(--transition);
+}
+.prompt-result a {
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1.5px;
+}
+.prompt-result a:hover {
+    text-decoration-color: var(--accent);
+}
+.prompt-result .strikethrough {
+    text-decoration-line: line-through;
+    text-decoration-color: var(--red);
+}
+.prompt-result code {
+    background-color: #fff1;
+    border-radius: var(--radius);
+    border: 1px solid var(--hl3);
+}
+.prompt-result strong {
+    font-weight: 700;
+}
+.prompt-result img {
+    border-radius: var(--radius);
+}
+.prompt-result .center {
+    display: flex;
+    justify-content: center;
+}
+.prompt-result .inline-block {
+    max-height: calc(var(--block-height) * 1.2);
+    display: inline-block;
+    margin-right: 2ch;
+}
+.prompt-result .inline-block img {
+    display: inline-block;
+    height: calc(var(--block-height) * 1.2);
 }

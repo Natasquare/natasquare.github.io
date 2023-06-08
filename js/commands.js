@@ -25,7 +25,7 @@ commands.ls = async(term, args) => {
     const typeIcons = {
         txt: '',
         'txt/md': '',
-        UNKNOWN: ''
+        UNKNOWN: '',
     };
     term.log(
         Object.entries(read)
@@ -33,6 +33,7 @@ commands.ls = async(term, args) => {
             .sort((a, b) =>
                 a.startsWith('') && b.startsWith('') ? 0 : a.startsWith('') ? -1 : 1
             )
+            .map((x) => (x.startsWith('') ? `**[#78aad8:${x}]**` : x))
             .join('\n')
     );
     return true;
@@ -71,29 +72,39 @@ commands.fetch = async(term, args) => {
                 res = await fetch(API),
                 {data} = await res.json();
             if (!data?.discord_user?.username) return term.log('fetch: could not get info');
-            term.log(`󰓹  ${data.discord_user.username}#${data.discord_user.discriminator}
-────── ──  ─
-󰀉  ${data.discord_user.id}
-󰐰  ${data.discord_status[0].toUpperCase() + data.discord_status.slice(1)} (${
+            console.log(data.discord_status);
+            term.log(`[#78aad8:󰓹]  **${data.discord_user.username}**#${
+                data.discord_user.discriminator
+            }
+[#232527:────── ──  ─]
+[#78aad8:󰀉]  \`${data.discord_user.id}\`
+${
+    {
+        online: '[#8ebc67:󰝥]  Online',
+        idle: '[#ebcb8b:󰽧]  Idle',
+        dnd: '[#bf616a:󰍶]  DND',
+        offline: '[#eeeeee66:󰻃]  Dead', // this is hl2 btw
+    }[data.discord_status]
+} (${
     ['web', 'mobile', 'desktop']
         .filter((x) => data[`active_on_discord_${x}`])
-        .join(' - ') || 'Probably sleeping'
+        .join(' - ') || 'probably sleeping'
 })
-󰐌  Activit${data.activities.length > 1 ? 'ies' : 'y'}
+[#78aad8:󰐌]  Activit${data.activities.length > 1 ? 'ies' : 'y'}
 ${
     data.activities
         .map(
             (x) =>
                 `|  ${
                     [
-                        '󰊗  Playing',
-                        '󰑋  Streaming',
-                        '󰝚  Listening to',
-                        '󰑈  Watching',
-                        '󰦨 ',
-                        '󱐋  Competing in'
+                        '[#78aad8:󰊗]  Playing',
+                        '[#78aad8:󰑋]  Streaming',
+                        '[#78aad8:󰝚]  Listening to',
+                        '[#78aad8:󰑈]  Watching',
+                        '[#78aad8:󰦨] ',
+                        '[#78aad8:󱐋]  Competing in',
                     ][x.type]
-                } ${x.name}${[x.details, x.state]
+                } **${x.name}**${[x.details, x.state]
                     .filter(Boolean)
                     .map((y) => `\n|  |  ${y}`)
                     .join('')}`
@@ -104,18 +115,18 @@ ${
             return true;
         },
         browser: async() => (
-            term.log(`󰓹  ${getBrowser()}
-────── ──  ─
-󰔃  Screen
-|  󰆾  ${screen.width}x${screen.height}
-|  󰉼  ${screen.colorDepth} bits
-󰞂  Navigator
-|  󰆘  Cookies ${navigator.cookieEnabled ? 'enabled' : 'disabled'}
-|  󰀉  ${navigator.userAgent
+            term.log(`[#78aad8:󰓹]  ${getBrowser()}
+[#232527:────── ──  ─]
+[#78aad8:󰔃]  Screen
+|  [#78aad8:󰆾]  ${screen.width}x${screen.height}
+|  [#78aad8:󰉼]  ${screen.colorDepth} bits
+[#78aad8:󰞂]  Navigator
+|  [#78aad8:󰆘]  Cookies ${navigator.cookieEnabled ? 'enabled' : 'disabled'}
+|  [#78aad8:󰀉]  ${navigator.userAgent
                 .match(/\(.+\)|.+? +?/g)
                 .map((x) => x.trim())
                 .join('\n|  |  ')}
-|    ${navigator.language}`),
+|  [#78aad8:]  ${navigator.language}`),
             true
         ),
         fm: async() => {
@@ -123,6 +134,7 @@ ${
             if (!d.recent && !d.data) {
                 return term.log('fetch: could not fetch any data');
             }
+            console.log(d);
             if (args[1] !== 'recent') {
                 if (!d.data) {
                     return term.log(
@@ -132,32 +144,37 @@ ${
                 }
                 const cur = d.recent.find((x) => x.timestamp[0] === 'Scrobbling now');
                 term.log(
-                    `󰓹  Natasquare
-────── ──  ─
-󰠃  Artists
-|  ${d.data.artists}
-󰐌  Scrobbles
-|  ${d.data.scrobbles}${
+                    `[#78aad8:󰓹]  **Natasquare**
+[#232527:────── ──  ─]
+[#78aad8:󰠃]  Artists
+|  \`${d.data.artists}\`
+[#78aad8:󰐌]  Scrobbles
+|  \`${d.data.scrobbles}\`${
     d.data.topTrack
         ? `
-󰓎  Weekly top track
-|  󰝚  ${d.data.topTrack.title}
-|  󰠃  ${d.data.topTrack.artist}`
+<!${2 + d.data.topTrack.title.match(/\(.+\)|[^(]+/g).length}><[#ebcb8b:󰓎]  Weekly top track
+|  [#78aad8:󰝚]  **${d.data.topTrack.title
+        .match(/\(.+\)|[^(]+/g)
+        .map((x) => x.trim())
+        .join('\n|  ')}**
+|  [#78aad8:󰠃]  ${d.data.topTrack.artist}><!${
+    2 + d.data.topTrack.title.match(/\(.+\)|[^(]+/g).length
+}><![](${d.data.topTrack.cover})>`
         : ''
 }${
     cur
         ? `
-󰋋  Current track
-|  󰝚  ${cur.title
+<!${2 + cur.title.match(/\(.+\)|[^(]+/g).length}><[#8ebc67:󰋋]  Current track
+|  [#78aad8:󰝚]  **${cur.title
         .match(/\(.+\)|[^(]+/g)
         .map((x) => x.trim())
-        .join('\n|  ')}
-|  󰠃  ${cur.artist}`
+        .join('\n|  ')}**
+|  [#78aad8:󰠃]  ${cur.artist}><!${2 + cur.title.match(/\(.+\)|[^(]+/g).length}><![](${cur.cover})>`
         : ''
 }${
     d.recent
         ? `
-󰋼  Use \`fetch fm recent\`
+[#78aad8:󰋼]  Use \`fetch fm recent\`
 |  for recent tracks`
         : ''
 }`
@@ -165,17 +182,21 @@ ${
             } else {
                 if (!d.recent) return term.log('fetch: could not fetch recent data');
                 term.log(
-                    `󰓎  Recent tracks
-────── ──  ─ 
+                    `[#ebcb8b:󰓎]  **Recent tracks**
+[#232527:────── ──  ─] 
 ${d.recent
         .map(
-            (x) => `${x.loved ? '󰣐' : '󱢠'}  ${x.title
+            (x) => `<!${1 + x.timestamp.length + x.title.match(/\(.+\)|[^(]+/g).length}><${
+                x.loved ? '[#bf616a:󰣐]' : '[#bf616a:󱢠]'
+            }  ${x.title
                 .match(/\(.+\)|[^(]+/g)
-                .map((x) => x.trim())
+                .map((x) => `**${x.trim()}**`)
                 .join('\n|  ')}
-󰠃  ${x.artist}
-󰥔  ${x.timestamp.join('\n|  ')}
-────── ──  ─`
+[#78aad8:󰠃]  ${x.artist}
+[#78aad8:󰥔]  ${x.timestamp.map((x) => `\`${x}\``).join('\n|  ')}><!${
+    1 + x.timestamp.length + x.title.match(/\(.+\)|[^(]+/g).length
+}><![](${x.cover})>
+[#232527:────── ──  ─]`
         )
         .join('\n')}`
                 );
@@ -186,8 +207,12 @@ ${d.recent
          * @request 637648484979441706
          */
         girls: async() =>
-            term.log(`󰀨  Girls not detected
-|  No bitches? :megamind:`),
+            new Promise((r) =>
+                setTimeout(
+                    () => term.log(`fetch: girls not detected, no bitches? :megamind:`) || r(),
+                    Math.random() * 3e3
+                )
+            ),
         git: async() => {
             /**
              * @link https://github.com/shinnn/github-username-regex
@@ -210,24 +235,24 @@ ${d.recent
             d = await d.json();
             if (type === 'users') {
                 if (!d.login) return term.log('fetch: user not found');
-                term.log(`󰓹  ${d.login}${d.bio ? `\n|  ${d.bio}` : ''}
-────── ──  ─
-󰀉  ${d.id}${d.company ? '\n󰅆  ' + d.company : ''}${d.blog ? '\n  ' + d.blog : ''}${
-    d.location ? '\n  ' + d.location : ''
-}
-  ${d.public_repos} public repos
-  ${d.followers} followers
+                term.log(`[#78aad8:󰓹]  ${d.login}${d.bio ? `\n|  ${d.bio}` : ''}
+[#232527:────── ──  ─]
+[#78aad8:󰀉]  ${d.id}${d.company ? '\n[#78aad8:󰅆]  ' + d.company : ''}${
+    d.blog ? '\n[#78aad8:]  ' + d.blog : ''
+}${d.location ? '\n[#78aad8:]  ' + d.location : ''}
+[#78aad8:]  ${d.public_repos} public repos
+[#78aad8:]  ${d.followers} followers
 |  ${d.following} following`);
             } else {
                 if (!d.name) return term.log('fetch: repository not found');
-                term.log(`󰓹  ${d.name}${d.description ? '\n|  ' + d.description : ''}
-────── ──  ─
-󰓎 ${d.stargazers_count} 󰧟 󰐠 ${d.watchers_count} 󰧟  ${d.forks_count}${
-    d.license ? '\n󰿃  ' + d.license.name : ''
-}${d.language ? '\n󰈮  ' + d.language : ''}`);
+                term.log(`[#78aad8:󰓹]  ${d.name}${d.description ? '\n|  ' + d.description : ''}
+[#232527:────── ──  ─]
+[#78aad8:󰓎] ${d.stargazers_count} 󰧟 [#78aad8:󰐠] ${d.watchers_count} 󰧟 [#78aad8:] ${d.forks_count}${
+    d.license ? '\n[#78aad8:󰿃]  ' + d.license.name : ''
+}${d.language ? '\n[#78aad8:󰈮]  ' + d.language : ''}`);
             }
             return true;
-        }
+        },
     };
     if (!args[0] || !d[args[0]]) {
         return term.log(
@@ -293,13 +318,17 @@ async function getFmData() {
         for (const track of tracks) {
             const artist = track.querySelector('.chartlist-artist').textContent.trim(),
                 title = track.querySelector('.chartlist-name').textContent.trim(),
-                cover = track.querySelector('.cover-art img').src,
+                cover = track.querySelector('.cover-art img').src.replace('/64s', ''),
                 loved =
                     track
                         .querySelector('.chartlist-loved div')
                         .getAttribute('data-toggle-button-current-state') === 'loved';
             let timestamp = track.querySelector('.chartlist-timestamp span');
             timestamp = [timestamp.title, timestamp.textContent.trim()].filter(Boolean);
+            if (timestamp.length === 1)
+                timestamp.push(
+                    '[A generated JSON playlist](//last.fm/player/station/user/natasquare/library)'
+                );
 
             recent.push({title, artist, cover, timestamp, loved});
         }
@@ -309,7 +338,7 @@ async function getFmData() {
     if (topTrackDiv) {
         const title = topTrackDiv.querySelector('.featured-item-name').textContent.trim(),
             artist = topTrackDiv.querySelector('.featured-item-artist').textContent.trim(),
-            cover = topTrackDiv.querySelector('.cover-art img').src;
+            cover = topTrackDiv.querySelector('.cover-art img').src.replace('/64s', '');
         data.topTrack = {title, artist, cover};
     }
     if (statDiv) {
@@ -324,15 +353,6 @@ async function getFmData() {
         }
     }
     return {recent, data};
-}
-
-/**
- * @link https://stackoverflow.com/a/7394787/18412379
- */
-function decodeHtml(html) {
-    const txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
 }
 
 /**
@@ -363,3 +383,8 @@ commands.uwu = async(term, args) => {
     }
     return true;
 };
+
+/**
+ * @dedicated 1018304559355006998
+ */
+commands.sus = (term) => commands.cat(term, ['/AMOGUS.txt']);
