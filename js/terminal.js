@@ -13,7 +13,7 @@ class Terminal {
 I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a huge music fan.`,
                         ],
                         'links.md': [
-                            'txt/md',
+                            'md',
                             `[Github](//github.com/Natasquare/)
 [Discord](//discord.com/users/696698254770831421)
 [Wakatime](//wakatime.com/@ntsq)
@@ -21,7 +21,7 @@ I'm a programmer, but I procrastinate a lot. Besides, I'm also a progammer and a
 [Rickroll](//www.youtube.com/watch?v=dQw4w9WgXcQ)`,
                         ],
                         'skills.md': [
-                            'txt/md',
+                            'md',
                             `+------------+-------------+
 |   **[#78aad8:Skills]**   |  **[#78aad8:Rating/10]**  |
 +------------+-------------+
@@ -277,6 +277,37 @@ class FS {
             else return;
         }
         return cur;
+    }
+
+    create(path, from = '/', content = ['', '']) {
+        path = this.parseRelativePath(path, from);
+        if (!path) return;
+        if (path === '/') return this.fs;
+        path = path
+            .replace(/^\/?(.*?)\/?$/, '$1')
+            .split('/')
+            .reverse();
+        let obj = {};
+        for (let i = 0; i < path.length; i++) {
+            if (i === 0) obj = {[path[i]]: content};
+            else obj = {[path[i]]: obj};
+        }
+
+        for (const key in this.fs) Object.assign(obj[key] || {}, this.fs[key]);
+
+        return Object.assign(this.fs, obj);
+    }
+
+    remove(path, from = '/') {
+        path = this.parseRelativePath(path, from);
+        if (!path) return;
+        path = path.replace(/^\/?(.*?)\/?$/, '$1').split('/');
+        let cur = this.fs;
+        for (let i = 0; i < path.length; i++) {
+            if (i === path.length - 1) delete cur[path[i]];
+            else if (path[i] in cur) cur = cur[path[i]];
+            else continue;
+        }
     }
 
     parseRelativePath(path, cur) {

@@ -29,7 +29,13 @@ commands.ls = async(term, args) => {
     };
     term.log(
         Object.entries(read)
-            .map((f) => `${Array.isArray(f[1]) ? typeIcons[f[1][0] || 'UNKNOWN'] : ''}  ${f[0]}`)
+            .map(
+                (f) =>
+                    `${
+                        (Array.isArray(f[1]) ? typeIcons[f[1][0] || 'UNKNOWN'] : '') ||
+                        typeIcons.UNKNOWN
+                    }  ${f[0]}`
+            )
             .sort((a, b) =>
                 a.startsWith('') && b.startsWith('') ? 0 : a.startsWith('') ? -1 : 1
             )
@@ -387,4 +393,45 @@ commands.uwu = async(term, args) => {
 /**
  * @dedicated 1018304559355006998
  */
-commands.sus = (term) => commands.cat(term, ['/AMOGUS.txt']);
+const sus = new Audio('assets/amogus.mp3');
+commands.sus = async(term) => {
+    commands.cat(term, ['/AMOGUS.txt']);
+    await sus.play();
+};
+
+commands.touch = async(term, args) => {
+    if (args[0]) term.d.fs.create(args[0], term.d.dir, [args[0].split('.').at(-1), '']);
+    return true;
+};
+
+commands.mkdir = async(term, args) => {
+    if (args[0]) term.d.fs.create(args[0], term.d.dir, {});
+    return true;
+};
+
+commands.rm = async(term, args) => {
+    if (!args[0]) return term.log('rm: no file specified');
+    term.d.fs.remove(args[0], term.d.dir);
+    return true;
+};
+
+commands.write = async(term, args) => {
+    if (!args[0]) return term.log('write: no file specified');
+    const read = term.d.fs.read(args[0], term.d.dir);
+    if (!read[0]) return term.log('write: is a directory');
+    if (!args[1]) return term.log('write: no content specified');
+    term.d.fs.remove(args[0], term.d.dir);
+    term.d.fs.create(args[0], term.d.dir, [read[0], args[1]]);
+    return true;
+};
+
+commands.tts = async(term, args) => {
+    if (!args[0]) return term.log('tts: nothing to speak');
+    const audio = new Audio(
+        `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(
+            args[0]
+        )}&tl=en&client=tw-ob&ttsspeed=1`
+    );
+    await audio.play();
+    return true;
+};
