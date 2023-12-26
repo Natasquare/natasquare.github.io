@@ -1,2 +1,2 @@
 # natasquare.github.io
-### rewrite very soon
+### i lied i'm updating this only when gta vi releases
