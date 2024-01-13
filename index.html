@@ -4,34 +4,30 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>ntsq@portfolio: ~</title>
+        <meta name="referrer" content="no-referrer">
+        <title>natasquare | desktop</title>
         <link rel="icon" href="assets/icon.png" />
-        <link rel="stylesheet" href="style.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-        <script src="js/snake.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="css/app.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+        />
+        <!-- <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap"
+        /> -->
+        <script src="/js/terminal.js"></script>
+        <script src="/js/commands.js"></script>
     </head>
     <body>
-        <div class="header">
-            <h1>
-                ntsq@portfolio: <span class="path">~</span>
-                <span class="icons">
-                    <i class="fa-regular fa-window-minimize"></i>
-                    <i class="fa-regular fa-square"></i>
-                    <i class="fa-regular fa-x"></i>
-                </span>
-            </h1>
+        <div class="bg"></div>
+        <div class="container">
+            <div class="button" id="runt">RUN</div>
         </div>
-        <div class="terminal">
-            <div class="display"></div>
-            <div class="command-line">
-                <span class="path">~</span> $
-                <div class="input-wrapper">
-                    <input type="text" autocomplete="off" autocorrect="off" autocapitalize="off" autofocus />
-                    <span class="cursor">&nbsp;</span>
-                </div>
-            </div>
-        </div>
-        <script src="js/app.js"></script>
+        <script src="js/index.js"></script>
     </body>
 </html>

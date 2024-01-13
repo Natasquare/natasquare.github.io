@@ -1,0 +1,359 @@
+:root {
+    --dark: #101215;
+    --dark2: #1a1a1d;
+    --light: #eee;
+    --bright: #fff;
+    --hl: #eeeeee99;
+    --hl2: #eeeeee66;
+    --hl3: #eeeeee03;
+    --accent: #78aad8;
+    --red: #bf616a;
+    --red-hl: #bf616a07;
+    --red-hl2: #bf616a10;
+    --yellow: #ebcb8b;
+    --yellow-hl: #ebcb8b07;
+    --yellow-hl2: #ebcb8b10;
+    --green: #8ebc67;
+    --orange: #d08770;
+    --main-font-f: 'JetBrains Mono', 'JetBrains Mono NF', 'Sarasa', monospace;
+    --main-font-s: 22px;
+    --radius: 4px;
+    --transition: 200ms;
+}
+
+::selection {
+    background-color: #eeeeee22; /* i am so done with css vars */
+}
+
+* {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--hl2) transparent;
+}
+::-webkit-scrollbar {
+    background: transparent;
+    width: 3px;
+    height: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--hl2);
+    border-radius: var(--radius);
+}
+
+/* nerd */
+@font-face {
+    font-family: 'JetBrains Mono NF';
+    src: url('/assets/JetBrainsMonoNerdFont.ttf') format('truetype');
+}
+
+/* sarasa mono for multi lang support */
+@font-face {
+    font-family: 'Sarasa';
+    src: url(https://picaq.github.io/fonts/Sarasa-Mono-J-Regular.woff2) format('woff2');
+}
+
+body {
+    background-color: var(--dark);
+    margin: 0;
+    font-family: var(--main-font-f);
+    color: var(--light);
+}
+
+.bg {
+    background: url('/assets/wallpaper.png') no-repeat center top;
+    min-width: 100vw;
+    min-height: 100vh;
+    mix-blend-mode: multiply;
+    position: fixed;
+    z-index: -69;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.button {
+    font-size: var(--main-font-s);
+    padding: 5px 10px;
+    background-color: transparent;
+    border: var(--light) 2px solid;
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+    display: block;
+    transition: var(--transition);
+}
+.button:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translate(-4px, -4px);
+    box-shadow: 1px 1px 0 var(--accent), 2px 2px 0 var(--accent), 3px 3px 0 var(--accent),
+        4px 4px 0 var(--accent);
+}
+.button-click {
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.window {
+    width: var(--starting-width);
+    height: calc(50px + 3em);
+    position: absolute;
+    box-shadow: 0 0 10px black;
+    font-size: 16px;
+    border-radius: calc(var(--radius) + 2px); /* idk why but weird gap without +2px */
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+    min-height: calc(30px + 2em); /* i fucking love hardcoding */
+    background-color: var(--dark);
+    border: 3px var(--dark2) solid;
+    transition: opacity var(--transition), box-shadow var(--transition);
+}
+.window-transitioning {
+    transition: opacity var(--transition), box-shadow var(--transition), width var(--transition),
+        height var(--transition), top var(--transition), left var(--transition);
+}
+.window .content {
+    /* border-radius: var(--radius); */
+    overflow: auto;
+    overflow-x: hidden;
+}
+.window .header {
+    background-color: var(--accent);
+    color: #101215aa;
+    transition: color var(--transition);
+    user-select: none;
+    cursor: move;
+    padding: 5px 10px;
+    padding-right: calc(64px + 2em);
+    border-radius: var(--radius) var(--radius) 0 0;
+    border-bottom: 3px var(--dark2) solid;
+    box-shadow: 0 1px 3px var(--dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: calc(1em + 5px);
+    overflow: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+.window .resize {
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    bottom: -3px; /* exclude the border */
+    right: -3px;
+    cursor: nwse-resize;
+}
+.window .header .close {
+    display: block;
+    position: absolute;
+    right: 0;
+    height: calc(1em + 5px);
+    padding: 5px 10px;
+    border-radius: 0 var(--radius) 0 0;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+    border: 3px transparent solid;
+    text-shadow: 0 0 4px var(--accent), 0 0 4px var(--accent);
+}
+.window .header .close:hover {
+    transition: border none;
+    color: var(--dark2) !important;
+    border: 3px var(--dark2) solid;
+    border-radius: var(--radius);
+    border-bottom-right-radius: 0;
+    background-color: var(--red);
+    cursor: pointer;
+    transform: translate(-4px, -5px);
+    text-shadow: none;
+    box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2),
+        4px 4px 0 var(--dark2), -1px -1px 1px #00000030, -2px -2px 4px #00000030,
+        -3px -3px 4px #00000030, -4px -4px 4px #00000030;
+}
+.window .header .max {
+    display: block;
+    position: absolute;
+    right: calc(1em + 25px);
+    height: calc(1em + 5px);
+    padding: 5px 10px;
+    border-radius: 0 var(--radius) 0 0;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+    border: 3px transparent solid;
+    text-shadow: 0 0 4px var(--accent), 0 0 4px var(--accent);
+}
+.window .header .max:hover {
+    transition: border none;
+    color: var(--dark2) !important;
+    border: 3px var(--dark2) solid;
+    border-radius: var(--radius);
+    border-bottom-right-radius: 0;
+    background-color: var(--green);
+    cursor: pointer;
+    transform: translate(-4px, -5px);
+    text-shadow: none;
+    box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2),
+        4px 4px 0 var(--dark2), -1px -1px 1px #00000030, -2px -2px 4px #00000030,
+        -3px -3px 4px #00000030, -4px -4px 4px #00000030;
+}
+.window-full .header .max:hover {
+    background-color: var(--yellow);
+}
+.window-active .header {
+    color: var(--dark2);
+}
+.window-active,
+.window:has(.close:hover) {
+    /* doesn't work for firefox :( */
+    box-shadow: 1px 1px 0 var(--dark2), 2px 2px 0 var(--dark2), 3px 3px 0 var(--dark2),
+        4px 4px 0 var(--dark2), 0 0 10px black;
+}
+.window-full {
+    width: calc(100vw - 26px) !important;
+    height: calc(100vh - 26px) !important;
+    top: 10px !important;
+    left: 10px !important;
+    box-shadow: none;
+}
+
+iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.terminal {
+    white-space: pre-wrap;
+}
+.terminal .prompt-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--bright);
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+    padding: 0;
+}
+.prompt {
+    --selection-pos: 0;
+    --selection-length: 1ch;
+    margin: 10px;
+    margin-left: 11px; /* ah yes, borders */
+    cursor: text;
+    position: relative;
+}
+.prompt .prompt-input {
+    cursor: text;
+    caret-color: transparent;
+}
+.prompt::after {
+    content: ' ';
+}
+.prompt-input:not(:disabled)::selection {
+    background-color: transparent !important;
+}
+.prompt:focus-within::after {
+    background-color: var(--bright) !important;
+    mix-blend-mode: difference;
+    width: var(--selection-length);
+    position: absolute;
+    left: var(--selection-pos);
+    overflow: hidden;
+    pointer-events: none;
+}
+.prompt-caret::after {
+    animation: blink 1696ms step-end infinite; /* nice */
+}
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+.prompt::before {
+    cursor: default;
+    content: '➜ ' attr(dir);
+    display: block;
+    color: var(--hl2);
+}
+.prompt-result {
+    border-bottom: 3px var(--dark2) solid;
+    padding: 10px;
+    border-left: 1px transparent solid;
+    word-break: break-all;
+}
+.prompt-result:hover {
+    background-color: var(--hl3);
+}
+.prompt-result .prompt {
+    margin: 0;
+    margin-bottom: 1em;
+}
+.prompt-result .prompt-input {
+    font-weight: 500;
+}
+.error {
+    border-left: 1px var(--red) solid;
+    background-color: var(--red-hl);
+}
+.error:hover {
+    background-color: var(--red-hl2);
+}
+.warn {
+    border-left: 1px var(--yellow) solid;
+    background-color: var(--yellow-hl);
+}
+.warn:hover {
+    background-color: var(--yellow-hl2);
+}
+.prompt-result a,
+.prompt-result .underline,
+.prompt-result .strikethrough {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-decoration-color: var(--hl2);
+    transition: text-decoration-color var(--transition);
+}
+.prompt-result a {
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1.5px;
+}
+.prompt-result a:hover {
+    text-decoration-color: var(--accent);
+}
+.prompt-result .strikethrough {
+    text-decoration-line: line-through;
+    text-decoration-color: var(--red);
+}
+.prompt-result code {
+    background-color: #fff1;
+    border-radius: var(--radius);
+    border: 1px solid var(--hl3);
+}
+.prompt-result strong {
+    font-weight: 700;
+}
+.prompt-result img {
+    border-radius: var(--radius);
+}
+.prompt-result .center {
+    display: flex;
+    justify-content: center;
+}
+.prompt-result .inline-block {
+    max-height: calc(var(--block-height) * 1.2);
+    display: inline-block;
+    margin-right: 2ch;
+}
+.prompt-result .inline-block img {
+    display: inline-block;
+    height: calc(var(--block-height) * 1.2);
+}
