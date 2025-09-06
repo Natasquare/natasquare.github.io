@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Natasquare</title>
+	<meta name="description" content="under construction! check back in 6 trillion years" />
+	<meta property="og:title" content="hello world" />
+	<meta property="og:description" content="under construction! check back in 6 trillion years" />
+	<meta property="og:type" content="website" />
+	<style>
+		:root {
+			--dark-0: #121212;
+			--dark-1: #161616;
+			--dark-2: #1e1e1e;
+			--dark-3: #262626;
+			--dark-4: #2f2f2f;
+			--dark-5: #393939;
+			--light-0: #fff;
+			--light-1: #f2f4f8;
+			--light-2: #dde1e6;
+			--light-3: #d0d0d0;
+			--light-4: #919191;
+			--light-5: #525252;
+			--mono: ui-monospace, monospace;
+			--sans: ui-sans-serif, system-ui, sans-serif;
+		}
+		body, html { height: 100% }
+		body {
+			margin: 0;
+			display: grid;
+			place-content: center;
+			background-color: var(--dark-0);
+			color: var(--light-1);
+		}
+		ul {
+			list-style: none;
+			padding: 0;
+			display: grid;
+			gap: 10px;
+			margin: 0;
+			width: 100%;
+		}
+		a {
+			color: var(--light-2);
+			text-decoration: none;
+			border: 1px solid var(--dark-3);
+			padding: 16px 18px;
+			border-radius: 8px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			transition: transform .06s ease, background .2s ease, border-color .2s ease;
+			background-color: var(--dark-2);
+			justify-content: space-between;
+			max-width: calc(100vw - 100px); /* 18*2 + 10*2 + 22*2 fuck css */
+		}
+		a:hover{
+			transform: scale(1.01);
+			border-color:var(--dark-5);
+			background-color: var(--dark-3);
+			color: var(--light-0);
+		}
+		.card {
+			background-color: var(--dark-1);
+			border: 1px solid var(--dark-2);
+			padding: 20px 22px;
+			border-radius: 8px;
+			display: grid;
+			gap: 20px;
+			transition: border-color .2s ease;
+		}
+		main {
+			margin: 10px;
+		}
+		.card:hover {
+			border-color: var(--dark-4);
+		}
+		h1 {
+			margin: 0;
+			color: var(--light-0);
+		}
+		.label {
+			flex-shrink: 0;
+		}
+		.url {
+			color: var(--light-4);
+			font-family: var(--mono);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			flex: 1;
+			min-width: 0;
+			text-align: right;
+		}
+		footer {
+			color: var(--light-5);
+		}
+	</style>
+</head>
+<body>
+	<main class="wrap">
+		<section class="card" aria-labelledby="title">
+			<h1 id="title">hi i'm Natasquare</h1>
+			<span>website is currently under construction! some links for now if you want:</span>
+			<ul>
+				<li>
+					<a href="https://github.com/Natasquare" target="_blank" rel="noopener">
+						<span class="label">github</span>
+						<span class="url">github.com/Natasquare</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://last.fm/user/Natasquare" target="_blank" rel="noopener">
+						<span class="label">last.fm</span>
+						<span class="url">last.fm/user/Natasquare</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://discord.com/users/696698254770831421" target="_blank" rel="noopener">
+						<span class="label">discord</span>
+						<span class="url">discord.com/users/696698254770831421</span>
+					</a>
+				</li>
+			</ul>
+			<footer>
+				updated 2025-09-06
+			</footer>
+		</section>
+	</main>
+</body>
+</html>
